@@ -13,4 +13,4 @@ dht11 humidity sensor\
 ultrasonic water level sensor\
 water level sensor/hall effect sensor\
 pumps\
-lights\
+lights
