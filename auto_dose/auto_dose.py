@@ -193,43 +193,6 @@ dosingAutoState_Display.grid(row=29,column=1)
 
 # ********************** dosing control end ********************
 
-# ********************** checks & activation start ********************
-
-def CheckActivation():
-    global waterCheckTimings, ecCheckTimings
-    while True:
-        if dosingAutoState:
-            timeNow = time.strftime('%H:%M:%S')
-            for thisTime in waterCheckTimings:
-                if thisTime == timeNow:
-                    WaterPumpActivation(1)
-            for thisTime in ecCheckTimings:
-                if thisTime == timeNow:
-                    EcCheck()
-
-def WaterPumpActivation(state):
-    pass
-    #ser.write(('PU {}'.format(state)).encode())
-
-def EcCheck(state):
-    pass
-    #ser.write(('AEC 1').encode())
-
-def EcDose(ecValue):
-    global waterTankSize, ecStage1Target, ecStage2Target, ecStage3Target, currentStage
-    volDifference = 0
-    if currentStage == 1:
-        volDifference = (ecStage1Target - ecValue) * 100
-    elif currentStage == 2:
-        volDifference = (ecStage2Target - ecValue) * 100
-    elif currentStage ==3:
-        volDifference = (ecStage3Target - ecValue) * 100
-    if volDifference >= 10:
-        duration = volDifference * 400
-    ser.write(('NP {}'.format(duration)).encode())
-
-# ********************** checks & activation end ********************
-
 # ********************** light control start *******************
 
 lightControlLabel = Label(root,text='LIGHTS CONTROL').grid(row=0,column=2,columnspan=2)
@@ -310,6 +273,8 @@ waterTankSize_Button.grid(row=11,column=2,columnspan=2)
 
 # ********************** tank parameters end ***************
 
+# ********************** EC status start ***************
+
 ECStatus_Label = Label(root,text='EC SENSOR').grid(row=14,column=2,columnspan=2)
 ECCurrent_Label = Label(root,text='Current EC').grid(row=15,column=2)
 ECCurrent_Display = Label(root,text='0')
@@ -318,6 +283,53 @@ ECCurrent_Display.grid(row=15,column=3)
 temperature_Label = Label(root,text='Current Temp').grid(row=16,column=2)
 temperature_Display = Label(root, text='0')
 temperature_Display.grid(row=16,column=3)
+
+# ********************** EC status end ***************
+
+# ********************** checks & activation start ********************
+
+def CheckActivation():
+    global waterCheckTimings, ecCheckTimings
+    while True:
+        if dosingAutoState:
+            timeNow = time.strftime('%H:%M:%S')
+            for thisTime in waterCheckTimings:
+                if thisTime == timeNow:
+                    WaterPumpActivation(1)
+            for thisTime in ecCheckTimings:
+                if thisTime == timeNow:
+                    EcCheck()
+
+def WaterPumpActivation(state):
+    pass
+    #ser.write(('PU {}'.format(state)).encode())
+
+def EcCheck(state):
+    pass
+    #ser.write(('AEC 1').encode())
+
+def EcDose(ecValue): # triggered by 'AEC' from uno
+    global waterTankSize, ecStage1Target, ecStage2Target, ecStage3Target, currentStage
+    nutrientVolume = 0
+    ECFactor = 100
+    if ecValue == 0 or ecValue == 100: # for out of range values, uno api sends a 0 or 100.
+        pass
+    
+    elif currentStage == 1:
+        nutrientVolume = (ecStage1Target - ecValue) * waterTankSize / ECFactor
+    elif currentStage == 2:
+        nutrientVolume = (ecStage2Target - ecValue) * waterTankSize / ECFactor
+    elif currentStage ==3:
+        nutrientVolume = (ecStage3Target - ecValue) * waterTankSize / ECFactor
+        
+    if nutrientVolume == 0 or volDifference == 100:
+        pass
+    else:
+        ser.write(('NP {}'.format(nutrientVolume)).encode())
+
+# ********************** checks & activation end ********************
+
+# ********************** incoming serial start ********************
 
 def CheckIncomingSerial():
     while True:
@@ -336,12 +348,16 @@ def CheckIncomingSerial():
             print(processedData)
 
 def CheckData(processedData):
-    if processedData[0] == 'EC':
+    if processedData[0] == 'EC': # only to get EC value
         ECCurrent_Display.config(text=processedData[1])
-    if processedData[0] == 'AEC':
+        
+    if processedData[0] == 'AEC': # uses EC value to do automated dosing
         ECDose(processedData[1])
+        
     if processedData[0] == 'TP':
     	temperature_Display.config(text=[processedData[1]])
+
+# ********************** incoming serial end ********************
 
 def main():
     root.mainloop()
