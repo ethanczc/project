@@ -308,21 +308,21 @@ def EcCheck(state):
     pass
     #ser.write(('AEC 1').encode())
 
+ECFactor = 100
 def EcDose(ecValue): # triggered by 'AEC' from uno
     global waterTankSize, ecStage1Target, ecStage2Target, ecStage3Target, currentStage
     nutrientVolume = 0
-    ECFactor = 100
     if ecValue == 0 or ecValue == 100: # for out of range values, uno api sends a 0 or 100.
         pass
     
     elif currentStage == 1:
-        nutrientVolume = (ecStage1Target - ecValue) * waterTankSize / ECFactor
+        nutrientVolume = (ecStage1Target - ecValue) * waterTankSize * 1000 / ECFactor
     elif currentStage == 2:
-        nutrientVolume = (ecStage2Target - ecValue) * waterTankSize / ECFactor
-    elif currentStage ==3:
-        nutrientVolume = (ecStage3Target - ecValue) * waterTankSize / ECFactor
+        nutrientVolume = (ecStage2Target - ecValue) * waterTankSize * 1000 / ECFactor
+    elif currentStage == 3:
+        nutrientVolume = (ecStage3Target - ecValue) * waterTankSize * 1000 / ECFactor
         
-    if nutrientVolume == 0 or volDifference == 100:
+    if nutrientVolume == 0:
         pass
     else:
         ser.write(('NP {}'.format(nutrientVolume)).encode())
