@@ -57,16 +57,16 @@ def DisplayCurrentStage():
 
 # ********************* serial control start **********
 
-ser = serial.Serial()
-ser.baudrate = 9600
+ser = serial.Serial() # create serial object without port address first
+ser.baudrate = 9600 
 
 serialControlLabel = Label(root,text='SERIAL CONTROL').grid(row=7,column=0,columnspan=2)
 
 def SerialConnect():
     serialAddress = serialPort_Entry.get()
-    ser.port = str(serialAddress)
+    ser.port = str(serialAddress) #define serial port address here
     try:
-        ser.open()
+        ser.open() #open serial port
     except:
         serialStatus_Display.config(text='failed to connect')
     else:
