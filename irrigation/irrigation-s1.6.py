@@ -348,9 +348,7 @@ autologAutoState_Display.grid(row=16,column=5)
 RecipeBlankSpace = Label(root,text='').grid(row=17,column=4,columnspan=2)
 recipe_Label = Label(root,text='RECIPE CONTROL').grid(row=18,column=4, columnspan=2)
 
-recipeContent = ''
 def LoadRecipe():
-    global recipeContent
     recipeName = file_Entry.get()
     try:
         file=open(recipeName,'r')
@@ -358,7 +356,7 @@ def LoadRecipe():
         recipeName_Display.config(text='recipe not found')
     else:
         recipeContent = file.readlines()
-        ReadRecipe()
+        ReadRecipe(recipeContent)
 
 fileLoad_Button = Button(root,text='Load recipe',command=LoadRecipe)
 fileLoad_Button.grid(row=19,column=4)
@@ -370,8 +368,7 @@ recipeName_Label = Label(root,text='Recipe Name').grid(row=20,column=4)
 recipeName_Display = Label(root,text='')
 recipeName_Display.grid(row=20,column=5)
 
-def ReadRecipe():
-    global recipeContent
+def ReadRecipe(recipeContent):
     for line in range (0,len(recipeContent)):
         thisLine = recipeContent[line][:-1] # splice off \r\n
         thisLine = thisLine.split(' ') #split line into 2 items in an array
