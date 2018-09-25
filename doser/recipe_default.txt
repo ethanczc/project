@@ -1,0 +1,12 @@
+recipe_name dosing_recipe.txt
+configuration CON_1
+start_date 20/9/2018
+tank_size 3000
+water_check 21:00:00
+ec_check 21:30:00
+stage1_ec 0.5
+stage1_duration 4
+stage2_ec 1.0
+stage2_duration 4
+stage3_ec 1.4
+stage3_duration 40
