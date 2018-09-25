@@ -81,7 +81,7 @@ serialConnect_Button.grid(row=8,column=0)
 
 serialPort_Entry = Entry(root)
 serialPort_Entry.grid(row=8,column=1)
-serialPort_Entry.insert(END,'/dev/ttyUSB0')
+serialPort_Entry.insert(END,'/dev/ttyUSB*')
 
 serialStatus_Label = Label(root, text='Serial Status').grid(row=9,column=0)
 serialStatus_Display = Label(root, text = 'Disconnected')
@@ -324,7 +324,7 @@ def LogEvent(incomingData):
 logAddress_Label = Label(root,text='Log File').grid(row=15,column=4)
 logAddress_Entry = Entry(root)
 logAddress_Entry.grid(row=15,column=5)
-logAddress_Entry.insert(END,'Log_Event_1.txt')
+logAddress_Entry.insert(END,'Log_Default.txt')
 
 logAutoState = False
 
@@ -364,7 +364,7 @@ fileLoad_Button = Button(root,text='Load recipe',command=LoadRecipe)
 fileLoad_Button.grid(row=19,column=4)
 file_Entry = Entry(root)
 file_Entry.grid(row=19,column=5)
-file_Entry.insert(END,'recipe1.txt')
+file_Entry.insert(END,'recipe_default.txt')
 
 recipeName_Label = Label(root,text='Recipe Name').grid(row=20,column=4)
 recipeName_Display = Label(root,text='')
