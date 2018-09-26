@@ -1,8 +1,12 @@
 from tkinter import *
+from tkinter import filedialog
 import time
 import threading
 import datetime
 import serial
+'''
+allows user to find and load their recipe using open file dialog
+'''
 
 root = Tk()
 root.title('doser-s1.1 ')
@@ -153,10 +157,12 @@ serialSend_Button.grid(row=3,column=2)
 
 recipeBlankSpace = Label(root,text='').grid(row=4,column=2,columnspan=2)
 
-recipe_Label = Label(root,text='RECIPE CONTROL').grid(row=5,column=2,columnspan=2)
+recipe_Label = Label(root,text='RECIPE CONTROL').grid(row=6,column=2,columnspan=2)
 
 def LoadRecipe():
-    recipeName = file_Entry.get()
+    fileName = filedialog.askopenfilename(initialdir = "/",title = "Select file",\
+        filetypes = (("text files","*.txt"),("all files","*.*")))
+    recipeName = fileName
     try:
         file=open(recipeName,'r')
     except:
@@ -166,13 +172,8 @@ def LoadRecipe():
         ReadRecipe(recipeContent)
 
 fileLoad_Button = Button(root,text='Load recipe',command=LoadRecipe)
-fileLoad_Button.grid(row=6,column=2)
-file_Entry = Entry(root)
-file_Entry.grid(row=6,column=3)
-file_Entry.insert(END,'recipe_default.txt')
-
-recipeName_Label = Label(root,text='Recipe Name').grid(row=7,column=2)
-recipeName_Display = Label(root,text='')
+fileLoad_Button.grid(row=7,column=2)
+recipeName_Display = Label(root,text='No recipe')
 recipeName_Display.grid(row=7,column=3)
 
 def ReadRecipe(recipeContent):
