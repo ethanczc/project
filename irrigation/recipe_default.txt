@@ -1,5 +1,8 @@
-recipe_name my_first_recipe
-configuration HALL_EFFECT
+recipe_name recipe_default
+configuration close_loop
+run_number 1a
+plant_type lettuce
+led_type L00-00(60)
 start_date 20/9/2018
 light_on 07:01:00
 light_off 19:01:00
