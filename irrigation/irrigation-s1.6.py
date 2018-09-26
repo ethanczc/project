@@ -1,4 +1,5 @@
 from tkinter import*
+from tkinter import filedialog
 import time
 import threading
 import serial
@@ -349,7 +350,9 @@ RecipeBlankSpace = Label(root,text='').grid(row=17,column=4,columnspan=2)
 recipe_Label = Label(root,text='RECIPE CONTROL').grid(row=18,column=4, columnspan=2)
 
 def LoadRecipe():
-    recipeName = file_Entry.get()
+    fileName = filedialog.askopenfilename(initialdir = "/",title = "Select file",\
+        filetypes = (("text files","*.txt"),("all files","*.*")))
+    recipeName = fileName
     try:
         file=open(recipeName,'r')
     except:
@@ -360,13 +363,8 @@ def LoadRecipe():
 
 fileLoad_Button = Button(root,text='Load recipe',command=LoadRecipe)
 fileLoad_Button.grid(row=19,column=4)
-file_Entry = Entry(root)
-file_Entry.grid(row=19,column=5)
-file_Entry.insert(END,'recipe_default.txt')
-
-recipeName_Label = Label(root,text='Recipe Name').grid(row=20,column=4)
-recipeName_Display = Label(root,text='')
-recipeName_Display.grid(row=20,column=5)
+recipeName_Display = Label(root,text='No recipe')
+recipeName_Display.grid(row=19,column=5)
 
 def ReadRecipe(recipeContent):
     for line in range (0,len(recipeContent)):
