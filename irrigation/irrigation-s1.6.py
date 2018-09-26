@@ -6,7 +6,7 @@ import datetime
 import smtplib
 
 root= Tk()
-root.title('Irrigation Serial v1.6')
+root.title('irrigation-s1.6')
 root.geometry('')
 
 targetEmail = 'ethanczc@gmail.com'
