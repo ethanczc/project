@@ -210,49 +210,37 @@ def ReadRecipe(recipeContent):
 # ********************** recipe control end **********************
 
 # ********************** dosing control start *******************
-
-blankSpace1Label = Label(root,text='* * * * * * * * * * * * * *').grid(row=12,column=0,columnspan=6)
-
 dosingControlLabel = Label(root,text='DOSING CONTROL').grid(row=14,column=0,columnspan=2)
-
-waterCheck_Label = Label(root,text='Water check timing').grid(row=15,column=0)
-waterCheck_Entry = Entry(root)
-waterCheck_Entry.grid(row=15,column=1)
-
-ecCheck_Label = Label(root,text='EC check timing').grid(row=16,column=0)
-ecCheck_Entry = Entry(root)
-ecCheck_Entry.grid(row=16,column=1)
-
 # STAGE 1
-dosingStage1Label = Label(root,text='STAGE 1').grid(row=17,column=0,columnspan=2)
+dosingStage1Label = Label(root,text='STAGE 1').grid(row=15,column=0,columnspan=2)
 
-ecStage1Target_Label = Label(root,text='Stage 1 EC target').grid(row=18,column=0)
+ecStage1Target_Label = Label(root,text='Stage 1 EC target').grid(row=16,column=0)
 ecStage1Target_Entry = Entry(root)
-ecStage1Target_Entry.grid(row=18,column=1)
+ecStage1Target_Entry.grid(row=16,column=1)
 
-ecStage1Duration_Label = Label(root,text='Stage 1 duration').grid(row=19,column=0)
+ecStage1Duration_Label = Label(root,text='Stage 1 duration').grid(row=17,column=0)
 ecStage1Duration_Entry = Entry(root)
-ecStage1Duration_Entry.grid(row=19,column=1)
+ecStage1Duration_Entry.grid(row=17,column=1)
 # STAGE 2
-dosingStage2Label = Label(root,text='STAGE 2').grid(row=20,column=0,columnspan=2)
+dosingStage2Label = Label(root,text='STAGE 2').grid(row=18,column=0,columnspan=2)
 
-ecStage2Target_Label = Label(root,text='Stage 2 EC target').grid(row=21,column=0)
+ecStage2Target_Label = Label(root,text='Stage 2 EC target').grid(row=19,column=0)
 ecStage2Target_Entry = Entry(root)
-ecStage2Target_Entry.grid(row=21,column=1)
+ecStage2Target_Entry.grid(row=19,column=1)
 
-ecStage2Duration_Label = Label(root,text='Stage 2 duration').grid(row=22,column=0)
+ecStage2Duration_Label = Label(root,text='Stage 2 duration').grid(row=20,column=0)
 ecStage2Duration_Entry = Entry(root)
-ecStage2Duration_Entry.grid(row=22,column=1)
+ecStage2Duration_Entry.grid(row=20,column=1)
 # STAGE 3
-dosingStage3Label = Label(root,text='STAGE 3').grid(row=23,column=0,columnspan=2)
+dosingStage3Label = Label(root,text='STAGE 3').grid(row=21,column=0,columnspan=2)
 
-ecStage3Target_Label = Label(root,text='Stage 3 EC target').grid(row=24,column=0)
+ecStage3Target_Label = Label(root,text='Stage 3 EC target').grid(row=22,column=0)
 ecStage3Target_Entry = Entry(root)
-ecStage3Target_Entry.grid(row=24,column=1)
+ecStage3Target_Entry.grid(row=22,column=1)
 
-ecStage3Duration_Label = Label(root,text='Stage 3 duration').grid(row=25,column=0)
+ecStage3Duration_Label = Label(root,text='Stage 3 duration').grid(row=23,column=0)
 ecStage3Duration_Entry = Entry(root)
-ecStage3Duration_Entry.grid(row=25,column=1)
+ecStage3Duration_Entry.grid(row=23,column=1)
 
 waterCheckTimings, ecCheckTimings = [] , []
 ecStage1Target, ecStage2Target, ecStage3Target = 1.0, 1.0, 1.0
@@ -278,8 +266,8 @@ def UpdateDosingControl():
         print(str(waterCheckTimings) + '\r\n' + str(ecCheckTimings) + '\r\nStage1: ' + str(ecStage1Target)\
          + '\r\nStage2: '+ str(ecStage2Target) + '\r\nStage3: ' + str(ecStage3Target))
 
-updateDosingControl_Button = Button(root,text='Update Dosing Control',command=UpdateDosingControl)
-updateDosingControl_Button.grid(row=28,column=0,columnspan=2)
+updateDosingControl_Button = Button(root,text='Update Dosing Control & Check',command=UpdateDosingControl)
+updateDosingControl_Button.grid(row=24,column=0,columnspan=2)
 
 dosingAutoState = False
 
@@ -292,23 +280,39 @@ def ChangeDosingAutoState():
         dosingAutoState_Display.config(text='MANUAL DOSING',fg='red')
 
 dosingAutoState_Button = Button(root,text='CHANGE MODE',command=ChangeDosingAutoState)
-dosingAutoState_Button.grid(row=29,column=0)
+dosingAutoState_Button.grid(row=25,column=0)
 
 dosingAutoState_Display = Label(root,text='MANUAL DOSING',fg='red')
-dosingAutoState_Display.grid(row=29,column=1)
+dosingAutoState_Display.grid(row=25,column=1)
 
 # ********************** dosing control end ********************
 
+# ********************** dosing check start *******************
+
+blankSpace1Label = Label(root,text='* * * * * * * * * * * * * *').grid(row=12,column=0,columnspan=6)
+
+dosingCheckLabel = Label(root,text='DOSING CHECK').grid(row=15,column=2,columnspan=2)
+
+waterCheck_Label = Label(root,text='Water check timing').grid(row=16,column=2)
+waterCheck_Entry = Entry(root)
+waterCheck_Entry.grid(row=16,column=3)
+
+ecCheck_Label = Label(root,text='EC check timing').grid(row=17,column=2)
+ecCheck_Entry = Entry(root)
+ecCheck_Entry.grid(row=17,column=3)
+
+# ********************** dosing check end *******************
+
 # ********************** EC status start ***************
 
-ECStatus_Label = Label(root,text='EC SENSOR').grid(row=14,column=2,columnspan=2)
-ECCurrent_Label = Label(root,text='Current EC').grid(row=15,column=2)
+ECStatus_Label = Label(root,text='EC SENSOR').grid(row=18,column=2,columnspan=2)
+ECCurrent_Label = Label(root,text='Current EC').grid(row=19,column=2)
 ECCurrent_Display = Label(root,text='0')
-ECCurrent_Display.grid(row=15,column=3)
+ECCurrent_Display.grid(row=19,column=3)
 
-temperature_Label = Label(root,text='Current Temp').grid(row=16,column=2)
+temperature_Label = Label(root,text='Current Temp').grid(row=20,column=2)
 temperature_Display = Label(root, text='0')
-temperature_Display.grid(row=16,column=3)
+temperature_Display.grid(row=20,column=3)
 
 # ********************** EC status end ***************
 
