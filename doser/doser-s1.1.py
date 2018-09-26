@@ -5,7 +5,7 @@ import datetime
 import serial
 
 root = Tk()
-root.title('Doser Serial version 1.1 ')
+root.title('doser-s1.1 ')
 root.geometry('')
 
 # **************** time control start ***************
