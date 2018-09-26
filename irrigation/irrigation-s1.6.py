@@ -275,11 +275,14 @@ def UpdateSensorsParameters():
     except:
         pass
     else:
-        ser.write(('TP0 {}\r\n'.format(tempInterval)).encode())
-        ser.write(('HM0 {}'.format(humidityInterval)).encode()) 
-        distanceLimit = float(distanceLimitEntry.get())
-        print(distanceTiming)
-        
+        try:
+            ser.write(('TP0 {}\r\n'.format(tempInterval)).encode())
+            ser.write(('HM0 {}'.format(humidityInterval)).encode()) 
+            distanceLimit = float(distanceLimitEntry.get())
+            print(distanceTiming)
+        except:
+            print('unable to send serial')
+
 updateSensorsParametersButton = Button(root, text = 'Update Sensors Parameters',command=UpdateSensorsParameters)
 updateSensorsParametersButton.grid(row=11,column=4,columnspan=2)
         
@@ -376,6 +379,12 @@ def ReadRecipe(recipeContent):
             recipeName_Display.config(text=value)
         if parameter == 'configuration':
             configEntry.insert(END,value)
+        if parameter == 'run_number':
+            runNumber_Entry.insert(END,value)
+        if parameter == 'plant_type':
+            plant_Entry.insert(END,value)
+        if parameter == 'led_type':
+            led_Entry.insert(END,value)
         if parameter == 'start_date':
             startDateEntry.insert(END,value)
         if parameter == 'light_on':
@@ -416,6 +425,25 @@ def ReadRecipe(recipeContent):
             pump2Stage3_Drain_Entry.insert(END,value)
 
 # *********************** recipe control end ***********************
+
+# *********************** data preview start ***********************
+
+runDataBlankSpace = Label(root,text='').grid(row=20,column=4,columnspan=2)
+runData_Label = Label(root,text='RUN DATA').grid(row=21,column=4,columnspan=2)
+
+runNumber_Label = Label(root,text='Run').grid(row=22,column=4)
+runNumber_Entry = Entry(root)
+runNumber_Entry.grid(row=22,column=5)
+
+plant_Label = Label(root,text='Plant').grid(row=23,column=4)
+plant_Entry = Entry(root)
+plant_Entry.grid(row=23,column=5)
+
+led_Label = Label(root,text='LED').grid(row=24,column=4)
+led_Entry = Entry(root)
+led_Entry.grid(row=24,column=5)
+
+# *********************** data preview start ***********************
 
 # *********************** pump 1 control start *******************
 
