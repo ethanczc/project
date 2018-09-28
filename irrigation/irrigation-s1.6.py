@@ -378,50 +378,73 @@ def ReadRecipe(recipeContent):
         if parameter == 'recipe_name':
             recipeName_Display.config(text=value)
         if parameter == 'configuration':
+            configEntry.delete(0,END)
             configEntry.insert(END,value)
         if parameter == 'run_number':
+            runNumber_Entry.delete(0,END)
             runNumber_Entry.insert(END,value)
         if parameter == 'plant_type':
+            plant_Entry.delete(0,END)
             plant_Entry.insert(END,value)
         if parameter == 'led_type':
+            led_Entry.delete(0,END)
             led_Entry.insert(END,value)
         if parameter == 'start_date':
+            startDateEntry.delete(0,END)
             startDateEntry.insert(END,value)
         if parameter == 'light_on':
+            lightOnEntry.delete(0,END)
             lightOnEntry.insert(END,value)
         if parameter == 'light_off':
+            lightOffEntry.delete(0,END)
             lightOffEntry.insert(END,value)
         if parameter == 'pump1_stage1_on':
+            pump1Stage1_On_Entry.delete(0,END)
             pump1Stage1_On_Entry.insert(END,value)
         if parameter == 'pump1_stage1_drain':
+            pump1Stage1_Drain_Entry.delete(0,END)
             pump1Stage1_Drain_Entry.insert(END,value)
         if parameter == 'pump1_stage2_on':
+            pump1Stage2_On_Entry.delete(0,END)
             pump1Stage2_On_Entry.insert(END,value)
         if parameter == 'pump1_stage2_drain':
+            pump1Stage2_Drain_Entry.delete(0,END)
             pump1Stage2_Drain_Entry.insert(END,value)
         if parameter == 'pump1_stage3_on':
+            pump1Stage3_On_Entry.delete(0,END)
             pump1Stage3_On_Entry.insert(END,value)
         if parameter == 'pump1_stage3_drain':
+            pump1Stage3_Drain_Entry.delete(0,END)
             pump1Stage3_Drain_Entry.insert(END,value)
         if parameter == 'stage1_duration':
+            stage1_Duration_Entry.delete(0,END)
             stage1_Duration_Entry.insert(END,value)
         if parameter == 'stage2_duration':
+            stage2_Duration_Entry.delete(0,END)
             stage2_Duration_Entry.insert(END,value)
         if parameter == 'stage3_duration':
+            stage3_Duration_Entry.delete(0,END)
             stage3_Duration_Entry.insert(END,value)
         if parameter == 'drain_duration':
+            drain_Duration_Entry.delete(0,END)
             drain_Duration_Entry.insert(END,value)
         if parameter == 'pump2_stage1_on':
+            pump2Stage1_On_Entry.delete(0,END)
             pump2Stage1_On_Entry.insert(END,value)
         if parameter == 'pump2_stage1_drain':
+            pump2Stage1_Drain_Entry.delete(0,END)
             pump2Stage1_Drain_Entry.insert(END,value)
         if parameter == 'pump2_stage2_on':
+            pump2Stage2_On_Entry.delete(0,END)
             pump2Stage2_On_Entry.insert(END,value)
         if parameter == 'pump2_stage2_drain':
+            pump2Stage2_Drain_Entry.delete(0,END)
             pump2Stage2_Drain_Entry.insert(END,value)
         if parameter == 'pump2_stage3_on':
+            pump2Stage3_On_Entry.delete(0,END)
             pump2Stage3_On_Entry.insert(END,value)
         if parameter == 'pump2_stage3_drain':
+            pump2Stage3_Drain_Entry.delete(0,END)
             pump2Stage3_Drain_Entry.insert(END,value)
 
 # *********************** recipe control end ***********************
