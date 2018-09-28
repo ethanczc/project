@@ -185,26 +185,37 @@ def ReadRecipe(recipeContent):
         if parameter == 'recipe_name':
             recipeName_Display.config(text=value)
         if parameter == 'configuration':
+            config_Entry.delete(0,END)
             config_Entry.insert(END,value)
         if parameter == 'start_date':
+            startDateEntry.delete(0,END)
             startDateEntry.insert(END,value)
         if parameter == 'tank_size':
+            waterTankSize_Entry.delete(0,END)
             waterTankSize_Entry.insert(END,value)
         if parameter == 'water_check':
+            waterCheck_Entry.delete(0,END)
             waterCheck_Entry.insert(END,value)
         if parameter == 'ec_check':
+            ecCheck_Entry.delete(0,END)
             ecCheck_Entry.insert(END,value)
         if parameter == 'stage1_ec':
+            ecStage1Target_Entry.delete(0,END)
             ecStage1Target_Entry.insert(END,value)
         if parameter == 'stage1_duration':
+            ecStage1Duration_Entry.delete(0,END)
             ecStage1Duration_Entry.insert(END,value)
         if parameter == 'stage2_ec':
+            ecStage2Target_Entry.delete(0,END)
             ecStage2Target_Entry.insert(END,value)
         if parameter == 'stage2_duration':
+            ecStage2Duration_Entry.delete(0,END)
             ecStage2Duration_Entry.insert(END,value)
         if parameter == 'stage3_ec':
+            ecStage3Target_Entry.delete(0,END)
             ecStage3Target_Entry.insert(END,value)
         if parameter == 'stage3_duration':
+            ecStage3Duration_Entry.delete(0,END)
             ecStage3Duration_Entry.insert(END,value)
 
 # ********************** recipe control end **********************
