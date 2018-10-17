@@ -3,30 +3,40 @@ import gui_irrigation_s2_0 as gui
 import time
 import datetime
 import serial
+import threading
+
+'''
+new version from 1.7, includes stage control (1-3) for light, irrigation
+'''
 
 class Irrigation(gui.GuiFrame):
 	def __init__(self,parent):
 		gui.GuiFrame.__init__(self,parent)
 		self.timeNow, self.dateNow = '', ''
-		self.serIrrigation = serial.Serial() # create serial object without port address first
+		self.serIrrigation = serial.Serial(timeout=0) # create serial object without port address first
 		self.serIrrigation.baudrate = 9600 #set serial baudrate
 		self.serDoser = serial.Serial() # create serial object without port address first
 		self.serDoser.baudrate = 9600 #set serial baudrate
 		self.logFile = '' #empty address
-		self.lightStage1On_Timings, self.lightStage1Off_Timings = [], []
-		self.lightStage2On_Timings, self.lightStage2Off_Timings = [], []
-		self.lightStage3On_Timings, self.lightStage3Off_Timings = [], []
-		self.pump1Stage1Pump_Timings, self.pump1Stage1Drain_Timings = [], []
-		self.pump1Stage2Pump_Timings, self.pump1Stage2Drain_Timings = [], []
-		self.pump1Stage3Pump_Timings, self.pump1Stage3Drain_Timings = [], []
-		self.pump2Stage1Pump_Timings, self.pump2Stage1Drain_Timings = [], []
-		self.pump2Stage2Pump_Timings, self.pump2Stage2Drain_Timings = [], []
-		self.pump2Stage3Pump_Timings, self.pump2Stage3Drain_Timings = [], []
+
+		self.light1Stage1On_Timings, self.light1Stage1Off_Timings = [], []
+		self.light1Stage2On_Timings, self.light1Stage2Off_Timings = [], []
+		self.light1Stage3On_Timings, self.light1Stage3Off_Timings = [], []
+
+		self.ch1Stage1Pump_Timings, self.ch1Stage1Drain_Timings = [], []
+		self.ch1Stage2Pump_Timings, self.ch1Stage2Drain_Timings = [], []
+		self.ch1Stage3Pump_Timings, self.ch1Stage3Drain_Timings = [], []
+
+		self.ch2Stage1Pump_Timings, self.ch2Stage1Drain_Timings = [], []
+		self.ch2Stage2Pump_Timings, self.ch2Stage2Drain_Timings = [], []
+		self.ch2Stage3Pump_Timings, self.ch2Stage3Drain_Timings = [], []
+
 		self.tankSize = 0
 		self.waterCheckTiming, self.ecCheckTiming = [], []
 		self.stage1Ec, self.stage2Ec, self.stage3Ec = 0, 0, 0
-		self.stage1Duration, self.stage2Duration, self.stage3Duration = 0, 0, 0
-		self.currentStage = 0
+		self.ch1Stage1Duration, self.ch1Stage2Duration, self.ch1Stage3Duration = 0, 0, 0
+		self.ch2Stage1Duration, self.ch2Stage2Duration, self.ch2Stage3Duration = 0, 0, 0
+		self.ch1CurrentStage, self.ch2CurrentStage = 0, 0
 		self.temp1, self.temp2 = 0, 0
 		self.humidity = 0
 		self.ec = 0
@@ -38,7 +48,7 @@ class Irrigation(gui.GuiFrame):
 		self.DoserCheck()
 		self.LightCheck()
 		self.CheckIncomingIrrigationSerial()
-		self.CheckIncomingDoserSerial()
+		#self.CheckIncomingDoserSerial()
 
 	def TimeDateDisplay(self):
 		self.timeNow = time.strftime('%H:%M:%S')
@@ -59,16 +69,26 @@ class Irrigation(gui.GuiFrame):
 		except:
 			pass
 		else:
-			if daysPassed <= self.stage1Duration:
-				self.currentStage = 1
-			elif self.stage1Duration <= daysPassed <= (self.stage1Duration + self.stage2Duration):
-				self.currentStage = 2
-			elif (self.stage1Duration + self.stage2Duration) <= daysPassed <= (self.stage1Duration + self.stage2Duration\
-			+ self.stage3Duration):
-				self.currentStage = 3
+			if daysPassed <= self.ch1Stage1Duration:
+				self.ch1CurrentStage = 1
+			elif self.ch1Stage1Duration <= daysPassed <= (self.ch1Stage1Duration + self.ch1Stage2Duration):
+				self.ch1CurrentStage = 2
+			elif (self.ch1Stage1Duration + self.ch1Stage2Duration) <= daysPassed <= (self.ch1Stage1Duration + self.ch1Stage2Duration\
+			+ self.ch1Stage3Duration):
+				self.ch1CurrentStage = 3
 			else:
-				self.currentStage = 3
-			self.currentStage_Display.SetLabel(str(self.currentStage))
+				self.ch1CurrentStage = 3
+			self.ch1CurrentStage_Display.SetLabel(str(self.ch1CurrentStage))
+			if daysPassed <= self.ch2Stage1Duration:
+				self.ch2CurrentStage = 1
+			elif self.ch2Stage1Duration <= daysPassed <= (self.ch2Stage1Duration + self.ch2Stage2Duration):
+				self.ch2CurrentStage = 2
+			elif (self.ch2Stage1Duration + self.ch2Stage2Duration) <= daysPassed <= (self.ch2Stage1Duration + self.ch2Stage2Duration\
+			+ self.ch2Stage3Duration):
+				self.ch2CurrentStage = 3
+			else:
+				self.ch2CurrentStage = 3
+			self.ch2CurrentStage_Display.SetLabel(str(self.ch2CurrentStage))
 
 	def LoadRecipe(self,event):
 		with wx.FileDialog(self, "Open Text file", wildcard="Text files (*.txt)|*.txt",\
@@ -101,60 +121,81 @@ class Irrigation(gui.GuiFrame):
 				self.led_Txtctrl.SetValue(value)
 			if parameter == 'start_date':
 				self.startDate_Txtctrl.SetValue(value)
-			if parameter == 'light_stage1_on':
-				self.lightStage1On_Timings = value.split(',')
-				self.lightStage1On_Display.SetLabel(str(self.lightStage1On_Timings))
-			if parameter == 'light_stage1_off':
-				self.lightStage1Off_Timings = value.split(',')
-				self.lightStage1Off_Display.SetLabel(str(self.lightStage1Off_Timings))
-			if parameter == 'light_stage2_on':
-				self.lightStage2On_Timings = value.split(',')
-				self.lightStage2On_Display.SetLabel(str(self.lightStage2On_Timings))
-			if parameter == 'light_stage2_off':
-				self.lightStage2Off_Timings = value.split(',')
-				self.lightStage2Off_Display.SetLabel(str(self.lightStage2Off_Timings))
-			if parameter == 'light_stage3_on':
-				self.lightStage3On_Timings = value.split(',')
-				self.lightStage3On_Display.SetLabel(str(self.lightStage3On_Timings))
-			if parameter == 'light_stage3_off':
-				self.lightStage3Off_Timings = value.split(',')
-				self.lightStage3Off_Display.SetLabel(str(self.lightStage3Off_Timings))
-			if parameter == 'pump1_stage1_pump':
-				self.pump1Stage1Pump_Timings = value.split(',')
-				self.pump1Stage1Pump_Display.SetLabel(str(self.pump1Stage1Pump_Timings))
-			if parameter == 'pump1_stage1_drain':
-				self.pump1Stage1Drain_Timings = value.split(',')
-				self.pump1Stage1Drain_Display.SetLabel(str(self.pump1Stage1Drain_Timings))
-			if parameter == 'pump1_stage2_pump':
-				self.pump1Stage2Pump_Timings = value.split(',')
-				self.pump1Stage2Pump_Display.SetLabel(str(self.pump1Stage2Pump_Timings))
-			if parameter == 'pump1_stage2_drain':
-				self.pump1Stage2Drain_Timings = value.split(',')
-				self.pump1Stage2Drain_Display.SetLabel(str(self.pump1Stage2Drain_Timings))
-			if parameter == 'pump1_stage3_pump':
-				self.pump1Stage3Pump_Timings = value.split(',')
-				self.pump1Stage3Pump_Display.SetLabel(str(self.pump1Stage3Pump_Timings))
-			if parameter == 'pump1_stage3_drain':
-				self.pump1Stage3Drain_Timings = value.split(',')
-				self.pump1Stage3Drain_Display.SetLabel(str(self.pump1Stage3Drain_Timings))
-			if parameter == 'pump2_stage1_pump':
-				self.pump2Stage1Pump_Timings = value.split(',')
-				self.pump2Stage1Pump_Display.SetLabel(str(self.pump2Stage1Pump_Timings))
-			if parameter == 'pump2_stage1_drain':
-				self.pump2Stage1Drain_Timings = value.split(',')
-				self.pump2Stage1Drain_Display.SetLabel(str(self.pump2Stage1Drain_Timings))
-			if parameter == 'pump2_stage2_pump':
-				self.pump2Stage2Pump_Timings = value.split(',')
-				self.pump2Stage2Pump_Display.SetLabel(str(self.pump2Stage2Pump_Timings))
-			if parameter == 'pump2_stage2_drain':
-				self.pump2Stage2Drain_Timings = value.split(',')
-				self.pump2Stage2Drain_Display.SetLabel(str(self.pump2Stage2Drain_Timings))
-			if parameter == 'pump2_stage3_pump':
-				self.pump2Stage3Pump_Timings = value.split(',')
-				self.pump2Stage3Pump_Display.SetLabel(str(self.pump2Stage3Pump_Timings))
-			if parameter == 'pump2_stage3_drain':
-				self.pump2Stage3Drain_Timings = value.split(',')
-				self.pump2Stage3Drain_Display.SetLabel(str(self.pump2Stage3Drain_Timings))
+
+			if parameter == 'light1_stage1_on':
+				self.light1Stage1On_Timings = value.split(',')
+				self.light1Stage1On_Display.SetLabel(str(self.light1Stage1On_Timings))
+			if parameter == 'light1_stage1_off':
+				self.light1Stage1Off_Timings = value.split(',')
+				self.light1Stage1Off_Display.SetLabel(str(self.light1Stage1Off_Timings))
+			if parameter == 'light1_stage2_on':
+				self.light1Stage2On_Timings = value.split(',')
+				self.light1Stage2On_Display.SetLabel(str(self.light1Stage2On_Timings))
+			if parameter == 'light1_stage2_off':
+				self.light1Stage2Off_Timings = value.split(',')
+				self.light1Stage2Off_Display.SetLabel(str(self.light1Stage2Off_Timings))
+			if parameter == 'light1_stage3_on':
+				self.light1Stage3On_Timings = value.split(',')
+				self.light1Stage3On_Display.SetLabel(str(self.light1Stage3On_Timings))
+			if parameter == 'light1_stage3_off':
+				self.light1Stage3Off_Timings = value.split(',')
+				self.light1Stage3Off_Display.SetLabel(str(self.light1Stage3Off_Timings))
+
+			if parameter == 'light2_stage1_on':
+				self.light2Stage1On_Timings = value.split(',')
+				self.light2Stage1On_Display.SetLabel(str(self.light2Stage1On_Timings))
+			if parameter == 'light2_stage1_off':
+				self.light2Stage1Off_Timings = value.split(',')
+				self.light2Stage1Off_Display.SetLabel(str(self.light2Stage1Off_Timings))
+			if parameter == 'light2_stage2_on':
+				self.light2Stage2On_Timings = value.split(',')
+				self.light2Stage2On_Display.SetLabel(str(self.light2Stage2On_Timings))
+			if parameter == 'light2_stage2_off':
+				self.light2Stage2Off_Timings = value.split(',')
+				self.light2Stage2Off_Display.SetLabel(str(self.light2Stage2Off_Timings))
+			if parameter == 'light2_stage3_on':
+				self.light2Stage3On_Timings = value.split(',')
+				self.light2Stage3On_Display.SetLabel(str(self.light2Stage3On_Timings))
+			if parameter == 'light2_stage3_off':
+				self.light2Stage3Off_Timings = value.split(',')
+				self.light2Stage3Off_Display.SetLabel(str(self.light2Stage3Off_Timings))
+
+			if parameter == 'channel1_stage1_pump':
+				self.ch1Stage1Pump_Timings = value.split(',')
+				self.pump1Stage1Pump_Display.SetLabel(str(self.ch1Stage1Pump_Timings))
+			if parameter == 'channel1_stage1_drain':
+				self.ch1Stage1Drain_Timings = value.split(',')
+				self.pump1Stage1Drain_Display.SetLabel(str(self.ch1Stage1Drain_Timings))
+			if parameter == 'channel1_stage2_pump':
+				self.ch1Stage2Pump_Timings = value.split(',')
+				self.pump1Stage2Pump_Display.SetLabel(str(self.ch1Stage2Pump_Timings))
+			if parameter == 'channel1_stage2_drain':
+				self.ch1Stage2Drain_Timings = value.split(',')
+				self.pump1Stage2Drain_Display.SetLabel(str(self.ch1Stage2Drain_Timings))
+			if parameter == 'channel1_stage3_pump':
+				self.ch1Stage3Pump_Timings = value.split(',')
+				self.pump1Stage3Pump_Display.SetLabel(str(self.ch1Stage3Pump_Timings))
+			if parameter == 'channel1_stage3_drain':
+				self.ch1Stage3Drain_Timings = value.split(',')
+				self.pump1Stage3Drain_Display.SetLabel(str(self.ch1Stage3Drain_Timings))
+			if parameter == 'channel2_stage1_pump':
+				self.ch2Stage1Pump_Timings = value.split(',')
+				self.pump2Stage1Pump_Display.SetLabel(str(self.ch2Stage1Pump_Timings))
+			if parameter == 'channel2_stage1_drain':
+				self.ch2Stage1Drain_Timings = value.split(',')
+				self.pump2Stage1Drain_Display.SetLabel(str(self.ch2Stage1Drain_Timings))
+			if parameter == 'channel2_stage2_pump':
+				self.ch2Stage2Pump_Timings = value.split(',')
+				self.pump2Stage2Pump_Display.SetLabel(str(self.ch2Stage2Pump_Timings))
+			if parameter == 'channel2_stage2_drain':
+				self.ch2Stage2Drain_Timings = value.split(',')
+				self.pump2Stage2Drain_Display.SetLabel(str(self.ch2Stage2Drain_Timings))
+			if parameter == 'channel2_stage3_pump':
+				self.ch2Stage3Pump_Timings = value.split(',')
+				self.pump2Stage3Pump_Display.SetLabel(str(self.ch2Stage3Pump_Timings))
+			if parameter == 'channel2_stage3_drain':
+				self.ch2Stage3Drain_Timings = value.split(',')
+				self.pump2Stage3Drain_Display.SetLabel(str(self.ch2Stage3Drain_Timings))
 			if parameter == 'tank_size':
 				self.tankSize = int(value)
 				self.tankSize_Display.SetLabel(str(self.tankSize))
@@ -173,15 +214,24 @@ class Irrigation(gui.GuiFrame):
 			if parameter == 'stage3_ec':
 				self.stage3Ec = float(value)
 				self.stage3Ec_Display.SetLabel(str(self.stage3Ec))
-			if parameter == 'stage1_duration':
-				self.stage1Duration = int(value)
-				self.stage1Duration_Display.SetLabel(str(self.stage1Duration))
-			if parameter == 'stage2_duration':
-				self.stage2Duration = int(value)
-				self.stage2Duration_Display.SetLabel(str(self.stage2Duration))
-			if parameter == 'stage3_duration':
-				self.stage3Duration = int(value)
-				self.stage3Duration_Display.SetLabel(str(self.stage3Duration))
+			if parameter == 'channel1_stage1_duration':
+				self.ch1Stage1Duration = int(value)
+				self.ch1Stage1Duration_Display.SetLabel(str(self.ch1Stage1Duration))
+			if parameter == 'channel1_stage2_duration':
+				self.ch1Stage2Duration = int(value)
+				self.ch1Stage2Duration_Display.SetLabel(str(self.ch1Stage2Duration))
+			if parameter == 'channel1_stage3_duration':
+				self.ch1Stage3Duration = int(value)
+				self.ch1Stage3Duration_Display.SetLabel(str(self.ch1Stage3Duration))
+			if parameter == 'channel2_stage1_duration':
+				self.ch2Stage1Duration = int(value)
+				self.ch2Stage1Duration_Display.SetLabel(str(self.ch2Stage1Duration))
+			if parameter == 'channel2_stage2_duration':
+				self.ch2Stage2Duration = int(value)
+				self.ch2Stage2Duration_Display.SetLabel(str(self.ch2Stage2Duration))
+			if parameter == 'channel2_stage3_duration':
+				self.ch2Stage3Duration = int(value)
+				self.ch2Stage3Duration_Display.SetLabel(str(self.ch2Stage3Duration))
 
 	def ConnectIrrigationSerial(self,event):
 		serialAddress = self.irrigationPort_Cbox.GetValue()
@@ -253,11 +303,11 @@ class Irrigation(gui.GuiFrame):
 		EcFactor = 100.0
 		if ecValue == 0 or ecValue == 100:
 			nutrientVolume = 0
-		elif currentStage == 1:
+		elif ch1CurrentStage == 1:
 			nutrientVolume = (stage1Ec - ecValue) * float(tankSize / EcFactor)
-		elif currentStage == 2:
+		elif ch1CurrentStage == 2:
 			nutrientVolume = (stage2Ec - ecValue) * float(tankSize / EcFactor)
-		elif currentStage == 3:
+		elif ch1CurrentStage == 3:
 			nutrientVolume = (stage3Ec - ecValue) * float(tankSize / EcFactor)
 		nutrientVolume = int(round(nutrientVolume))
 		if nutrientVolume <= 0:
@@ -266,91 +316,117 @@ class Irrigation(gui.GuiFrame):
 			serDoser.write(('NP {}'.format(nutrientVolume/2)).encode())
 
 	def LightCheck(self):
-		if self.autoLight_ToggleBtn.GetValue() == True:
-			if self.currentStage == 1:
-				for thisTime in self.lightStage1On_Timings:
+		if self.autoLight1_ToggleBtn.GetValue() == True:
+			if self.ch1CurrentStage == 1:
+				for thisTime in self.light1Stage1On_Timings:
 					if thisTime == self.timeNow:
-						self.LightFunction(1)
-				for thisTime in self.lightStage1Off_Timings:
+						self.LightFunction(1,1)
+				for thisTime in self.light1Stage1Off_Timings:
 					if thisTime == self.timeNow:
-						self.LightFunction(0)
-			elif self.currentStage == 2:
-				for thisTime in self.lightStage2On_Timings:
+						self.LightFunction(1,0)
+			elif self.ch1CurrentStage == 2:
+				for thisTime in self.light1Stage2On_Timings:
 					if thisTime == self.timeNow:
-						self.LightFunction(1)
-				for thisTime in self.lightStage2Off_Timings:
+						self.LightFunction(1,1)
+				for thisTime in self.light1Stage2Off_Timings:
 					if thisTime == self.timeNow:
-						self.LightFunction(0)
-			elif self.currentStage == 3:
-				for thisTime in self.lightStage3On_Timings:
+						self.LightFunction(1,0)
+			elif self.ch1CurrentStage == 3:
+				for thisTime in self.light1Stage3On_Timings:
 					if thisTime == self.timeNow:
-						self.LightFunction(1)
-				for thisTime in self.lightStage3Off_Timings:
+						self.LightFunction(1,1)
+				for thisTime in self.light1Stage3Off_Timings:
 					if thisTime == self.timeNow:
-						self.LightFunction(0)
+						self.LightFunction(1,0)
 
-	def LightFunction(self,state):
-		self.serIrrigation.write(('LT {}'.format(state)).encode())
+		if self.autoLight2_ToggleBtn.GetValue() == True:
+			if self.ch2CurrentStage == 1:
+				for thisTime in self.light2Stage1On_Timings:
+					if thisTime == self.timeNow:
+						self.LightFunction(2,1)
+				for thisTime in self.light2Stage1Off_Timings:
+					if thisTime == self.timeNow:
+						self.LightFunction(2,0)
+			elif self.ch2CurrentStage == 2:
+				for thisTime in self.light2Stage2On_Timings:
+					if thisTime == self.timeNow:
+						self.LightFunction(2,1)
+				for thisTime in self.light2Stage2Off_Timings:
+					if thisTime == self.timeNow:
+						self.LightFunction(2,0)
+			elif self.ch2CurrentStage == 3:
+				for thisTime in self.light2Stage3On_Timings:
+					if thisTime == self.timeNow:
+						self.LightFunction(2,1)
+				for thisTime in self.light2Stage3Off_Timings:
+					if thisTime == self.timeNow:
+						self.LightFunction(2,0)
+
+	def LightFunction(self,light,state):
+		self.serIrrigation.write(('LT{} {}'.format(light,state)).encode())
+		#print('LT{} {}'.format(light,state))
 
 	def IrrigationCheck(self):
 		if self.autoPump1_ToggleBtn.GetValue() == True:
-			if self.currentStage == 1:
-				for thisTime in self.pump1Stage1Pump_Timings:
+			if self.ch1CurrentStage == 1:
+				for thisTime in self.ch1Stage1Pump_Timings:
 					if thisTime == self.timeNow:
 						self.PumpFunction(1,1)
-				for thisTime in self.pump1Stage1Drain_Timings:
+				for thisTime in self.ch1Stage1Drain_Timings:
 					if thisTime == self.timeNow:
 						self.DrainFunction(1,1)
-			elif self.currentStage == 2:
-				for thisTime in self.pump1Stage2Pump_Timings:
+			elif self.ch1CurrentStage == 2:
+				for thisTime in self.ch1Stage2Pump_Timings:
 					if thisTime == self.timeNow:
 						self.self.PumpFunction(1,1)
-				for thisTime in self.pump1Stage2Drain_Timings:
+				for thisTime in self.ch1Stage2Drain_Timings:
 					if thisTime == self.timeNow:
 						self.DrainFunction(1,1)
-			elif self.currentStage == 3:
-				for thisTime in self.pump1Stage3Pump_Timings:
+			elif self.ch1CurrentStage == 3:
+				for thisTime in self.ch1Stage3Pump_Timings:
 					if thisTime == self.timeNow:
 						self.PumpFunction(1,1)
-				for thisTime in self.pump1Stage3Drain_Timings:
+				for thisTime in self.ch1Stage3Drain_Timings:
 					if thisTime == self.timeNow:
 						self.DrainFunction(1,1)
 		if self.autoPump2_ToggleBtn.GetValue() == True:
-			if self.currentStage == 1:
-				for thisTime in self.pump2Stage1Pump_Timings:
+			if self.ch2CurrentStage == 1:
+				for thisTime in self.ch2Stage1Pump_Timings:
 					if thisTime == self.timeNow:
 						self.PumpFunction(2,1)
-				for thisTime in self.pump2Stage1Drain_Timings:
+				for thisTime in self.ch2Stage1Drain_Timings:
 					if thisTime == self.timeNow:
 						self.DrainFunction(2,1)
-			if self.currentStage == 2:
-				for thisTime in self.pump2Stage2Pump_Timings:
+			if self.ch2CurrentStage == 2:
+				for thisTime in self.ch2Stage2Pump_Timings:
 					if thisTime == self.timeNow:
 						self.PumpFunction(2,1)
-				for thisTime in self.pump2Stage2Drain_Timings:
+				for thisTime in self.ch2Stage2Drain_Timings:
 					if thisTime == self.timeNow:
 						self.DrainFunction(2,1)
-			if self.currentStage == 3:
-				for thisTime in self.pump2Stage3Pump_Timings:
+			if self.ch2CurrentStage == 3:
+				for thisTime in self.ch2Stage3Pump_Timings:
 					if thisTime == self.timeNow:
 						self.PumpFunction(2,1)
-				for thisTime in self.pump2Stage3Drain_Timings:
+				for thisTime in self.ch2Stage3Drain_Timings:
 					if thisTime == self.timeNow:
 						self.DrainFunction(2,1)
 
 	def PumpFunction(self,pump,state):
 		self.serIrrigation.write(('PU{} {}'.format(pump,state)).encode())
+		#print('PU{} {}'.format(pump,state))
 
 	def DrainFunction(self,drain,state):
-		self.serIrrigation.write(('DR{} {}'.format(pump,state)).encode())
+		self.serIrrigation.write(('DR{} {}'.format(drain,state)).encode())
+		#print('DR{} {}'.format(drain,state))
 
 	def CheckIrrigation1Fields(self,event):
-		if self.serIrrigation.isOpen() == False or not self.pump1Stage1Pump_Timings:
+		if self.serIrrigation.isOpen() == False or not self.ch1Stage1Pump_Timings:
 			print ('unable to AUTO')
 			self.autoPump1_ToggleBtn.SetValue(False)
 
 	def CheckIrrigation2Fields(self,event):
-		if self.serIrrigation.isOpen() == False or not self.pump2Stage1Pump_Timings:
+		if self.serIrrigation.isOpen() == False or not self.ch2Stage1Pump_Timings:
 			print ('unable to AUTO')
 			self.autoPump2_ToggleBtn.SetValue(False)
 
@@ -359,32 +435,43 @@ class Irrigation(gui.GuiFrame):
 			print('unable to AUTO')
 			self.autoDoser_ToggleBtn.SetValue(False)
 
-	def CheckLightFields(self,event):
-		if self.serIrrigation.isOpen == False or not self.lightStage1On_Timings:
+	def CheckLight1Fields(self,event):
+		if self.serIrrigation.isOpen() == False or not self.light1Stage1On_Timings:
 			print('unable to AUTO')
-			self.autoLight_ToggleBtn.SetValue(False)
+			self.autoLight1_ToggleBtn.SetValue(False)
+
+	def CheckLight2Fields(self,event):
+		if self.serIrrigation.isOpen() == False or not self.light2Stage1On_Timings:
+			print('unable to AUTO')
+			self.autoLight2_ToggleBtn.SetValue(False)
 
 	def CheckIncomingIrrigationSerial(self):
 		try:
-			rawData = self.serIrrigation.readLine()
-			SerialDataProcessor(rawData)
+			rawData = self.serIrrigation.readline()
 		except:
 			pass
+		else:
+			self.SerialDataProcessor(rawData)
+			print(rawData)
 
 	def CheckIncomingDoserSerial(self):
 		try:
 			rawData = self.serDoser.readLine()
-			SerialDataProcessor(rawData)
+			self.SerialDataProcessor(rawData)
 		except:
 			pass
 			
-	def SerialDataProcessor(self,data):
-		rawData = rawData.decode('utf-8')
-		rawData = rawData[:-2]
-		rawDataList = rawData.split(' ')
-		dataType = rawDataList[0]
-		value = float(rawDataList[1])
-		CheckData(dataType,value)
+	def SerialDataProcessor(self,rawData):
+		try:
+			rawData = rawData.decode('utf-8')
+			rawData = rawData[:-2]
+			rawDataList = rawData.split(' ')
+			dataType = rawDataList[0]
+			value = float(rawDataList[1])
+		except:
+			pass
+		else:
+			self.CheckData(dataType,value)
 
 	def CheckData(self,dataType,value):
 		if dataType == 'TP1' or dataType == 'TP2':
@@ -395,6 +482,12 @@ class Irrigation(gui.GuiFrame):
 			self.ShowEc(value)
 		elif dataType == 'AEC':
 			self.EcDose(value)
+		elif dataType == 'INT':
+			print ('INT 1')
+		elif dataType == 'ECPU1':
+			print ('PU1 activated')
+		elif dataType == 'ECDR1':
+			print('DR1 activated')
 
 	def ShowEc(self,ecValue):
 		self.ec = ecValue
@@ -408,7 +501,7 @@ class Irrigation(gui.GuiFrame):
 			self.temp2 = temperature
 			self.temp2_Display.SetLabel(str(self.temp2))
 		tempA = round (((self.temp1 + self.temp2)/2),2)
-		tempA_Display.SetLabel(str(tempA))
+		self.tempA_Display.SetLabel(str(tempA))
 
 	def ShowHumidity(self,humidity):
 		self.humidity = humidity
