@@ -23,7 +23,7 @@ class GuiFrame ( wx.Frame ):
 		
 		self.timer = wx.Timer()
 		self.timer.SetOwner( self, wx.ID_ANY )
-		self.timer.Start( 500 )
+		self.timer.Start( 1000 )
 		
 		bSizer1 = wx.BoxSizer( wx.VERTICAL )
 		
@@ -62,13 +62,21 @@ class GuiFrame ( wx.Frame ):
 		self.daysPassed_Display.Wrap( -1 )
 		gSizer2.Add( self.daysPassed_Display, 0, wx.ALL, 5 )
 		
-		self.currentStage_Label = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Current Stage", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.currentStage_Label.Wrap( -1 )
-		gSizer2.Add( self.currentStage_Label, 0, wx.ALL, 5 )
+		self.ch1CurrentStage_Label = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Channel 1 Stage", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1CurrentStage_Label.Wrap( -1 )
+		gSizer2.Add( self.ch1CurrentStage_Label, 0, wx.ALL, 5 )
 		
-		self.currentStage_Display = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"0", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.currentStage_Display.Wrap( -1 )
-		gSizer2.Add( self.currentStage_Display, 0, wx.ALL, 5 )
+		self.ch1CurrentStage_Display = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"0", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1CurrentStage_Display.Wrap( -1 )
+		gSizer2.Add( self.ch1CurrentStage_Display, 0, wx.ALL, 5 )
+		
+		self.ch1CurrentStage_Label = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Channel 2 Stage", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1CurrentStage_Label.Wrap( -1 )
+		gSizer2.Add( self.ch1CurrentStage_Label, 0, wx.ALL, 5 )
+		
+		self.ch2CurrentStage_Display = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, u"0", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2CurrentStage_Display.Wrap( -1 )
+		gSizer2.Add( self.ch2CurrentStage_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer1.Add( gSizer2, 1, wx.EXPAND, 5 )
@@ -96,7 +104,7 @@ class GuiFrame ( wx.Frame ):
 		self.irrigationPort_Display.Wrap( -1 )
 		gSizer3.Add( self.irrigationPort_Display, 0, wx.ALL, 5 )
 		
-		self.sendIrrigationSerial_Btn = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Send Command", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.sendIrrigationSerial_Btn = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Irrigation Command", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer3.Add( self.sendIrrigationSerial_Btn, 0, wx.ALL, 5 )
 		
 		self.serialIrrigationInput_Txtctrl = wx.TextCtrl( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -177,29 +185,29 @@ class GuiFrame ( wx.Frame ):
 		self.main_Panel.SetSizer( gSizer1 )
 		self.main_Panel.Layout()
 		gSizer1.Fit( self.main_Panel )
-		self.notebook.AddPage( self.main_Panel, u"Main", True )
-		self.light_Panel = wx.Panel( self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.notebook.AddPage( self.main_Panel, u"Main", False )
+		self.light1_Panel = wx.Panel( self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer61 = wx.BoxSizer( wx.VERTICAL )
 		
-		sbSizer181 = wx.StaticBoxSizer( wx.StaticBox( self.light_Panel, wx.ID_ANY, u"Stage 1" ), wx.VERTICAL )
+		sbSizer181 = wx.StaticBoxSizer( wx.StaticBox( self.light1_Panel, wx.ID_ANY, u"Stage 1" ), wx.VERTICAL )
 		
 		gSizer191 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.lightStage1On_Label = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage1On_Label.Wrap( -1 )
-		gSizer191.Add( self.lightStage1On_Label, 0, wx.ALL, 5 )
+		self.light1Stage1On_Label = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage1On_Label.Wrap( -1 )
+		gSizer191.Add( self.light1Stage1On_Label, 0, wx.ALL, 5 )
 		
-		self.lightStage1On_Display = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage1On_Display.Wrap( -1 )
-		gSizer191.Add( self.lightStage1On_Display, 0, wx.ALL, 5 )
+		self.light1Stage1On_Display = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage1On_Display.Wrap( -1 )
+		gSizer191.Add( self.light1Stage1On_Display, 0, wx.ALL, 5 )
 		
-		self.lightStage1Off_Label = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage1Off_Label.Wrap( -1 )
-		gSizer191.Add( self.lightStage1Off_Label, 0, wx.ALL, 5 )
+		self.light1Stage1Off_Label = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage1Off_Label.Wrap( -1 )
+		gSizer191.Add( self.light1Stage1Off_Label, 0, wx.ALL, 5 )
 		
-		self.lightStage1Off_Display = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage1Off_Display.Wrap( -1 )
-		gSizer191.Add( self.lightStage1Off_Display, 0, wx.ALL, 5 )
+		self.light1Stage1Off_Display = wx.StaticText( sbSizer181.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage1Off_Display.Wrap( -1 )
+		gSizer191.Add( self.light1Stage1Off_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer181.Add( gSizer191, 1, wx.EXPAND, 5 )
@@ -207,25 +215,25 @@ class GuiFrame ( wx.Frame ):
 		
 		bSizer61.Add( sbSizer181, 1, wx.EXPAND, 5 )
 		
-		sbSizer191 = wx.StaticBoxSizer( wx.StaticBox( self.light_Panel, wx.ID_ANY, u"Stage 2" ), wx.VERTICAL )
+		sbSizer191 = wx.StaticBoxSizer( wx.StaticBox( self.light1_Panel, wx.ID_ANY, u"Stage 2" ), wx.VERTICAL )
 		
 		gSizer201 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.lightStage2On_Label = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage2On_Label.Wrap( -1 )
-		gSizer201.Add( self.lightStage2On_Label, 0, wx.ALL, 5 )
+		self.light1Stage2On_Label = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage2On_Label.Wrap( -1 )
+		gSizer201.Add( self.light1Stage2On_Label, 0, wx.ALL, 5 )
 		
-		self.lightStage2On_Display = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage2On_Display.Wrap( -1 )
-		gSizer201.Add( self.lightStage2On_Display, 0, wx.ALL, 5 )
+		self.light1Stage2On_Display = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage2On_Display.Wrap( -1 )
+		gSizer201.Add( self.light1Stage2On_Display, 0, wx.ALL, 5 )
 		
-		self.lightStage2Off_Label = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage2Off_Label.Wrap( -1 )
-		gSizer201.Add( self.lightStage2Off_Label, 0, wx.ALL, 5 )
+		self.light1Stage2Off_Label = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage2Off_Label.Wrap( -1 )
+		gSizer201.Add( self.light1Stage2Off_Label, 0, wx.ALL, 5 )
 		
-		self.lightStage2Off_Display = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage2Off_Display.Wrap( -1 )
-		gSizer201.Add( self.lightStage2Off_Display, 0, wx.ALL, 5 )
+		self.light1Stage2Off_Display = wx.StaticText( sbSizer191.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage2Off_Display.Wrap( -1 )
+		gSizer201.Add( self.light1Stage2Off_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer191.Add( gSizer201, 1, wx.EXPAND, 5 )
@@ -233,25 +241,25 @@ class GuiFrame ( wx.Frame ):
 		
 		bSizer61.Add( sbSizer191, 1, wx.EXPAND, 5 )
 		
-		sbSizer211 = wx.StaticBoxSizer( wx.StaticBox( self.light_Panel, wx.ID_ANY, u"Stage 3" ), wx.VERTICAL )
+		sbSizer211 = wx.StaticBoxSizer( wx.StaticBox( self.light1_Panel, wx.ID_ANY, u"Stage 3" ), wx.VERTICAL )
 		
 		gSizer211 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.lightStage3On_Label = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage3On_Label.Wrap( -1 )
-		gSizer211.Add( self.lightStage3On_Label, 0, wx.ALL, 5 )
+		self.light1Stage3On_Label = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage3On_Label.Wrap( -1 )
+		gSizer211.Add( self.light1Stage3On_Label, 0, wx.ALL, 5 )
 		
-		self.lightStage3On_Display = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage3On_Display.Wrap( -1 )
-		gSizer211.Add( self.lightStage3On_Display, 0, wx.ALL, 5 )
+		self.light1Stage3On_Display = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage3On_Display.Wrap( -1 )
+		gSizer211.Add( self.light1Stage3On_Display, 0, wx.ALL, 5 )
 		
-		self.lightStage3Off_Label = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage3Off_Label.Wrap( -1 )
-		gSizer211.Add( self.lightStage3Off_Label, 0, wx.ALL, 5 )
+		self.light1Stage3Off_Label = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage3Off_Label.Wrap( -1 )
+		gSizer211.Add( self.light1Stage3Off_Label, 0, wx.ALL, 5 )
 		
-		self.lightStage3Off_Display = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.lightStage3Off_Display.Wrap( -1 )
-		gSizer211.Add( self.lightStage3Off_Display, 0, wx.ALL, 5 )
+		self.light1Stage3Off_Display = wx.StaticText( sbSizer211.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light1Stage3Off_Display.Wrap( -1 )
+		gSizer211.Add( self.light1Stage3Off_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer211.Add( gSizer211, 1, wx.EXPAND, 5 )
@@ -259,12 +267,12 @@ class GuiFrame ( wx.Frame ):
 		
 		bSizer61.Add( sbSizer211, 1, wx.EXPAND, 5 )
 		
-		sbSizer22 = wx.StaticBoxSizer( wx.StaticBox( self.light_Panel, wx.ID_ANY, u"Control" ), wx.VERTICAL )
+		sbSizer22 = wx.StaticBoxSizer( wx.StaticBox( self.light1_Panel, wx.ID_ANY, u"Control" ), wx.VERTICAL )
 		
 		gSizer22 = wx.GridSizer( 0, 2, 0, 0 )
 		
-		self.autoLight_ToggleBtn = wx.ToggleButton( sbSizer22.GetStaticBox(), wx.ID_ANY, u"AUTO", wx.DefaultPosition, wx.DefaultSize, 0 )
-		gSizer22.Add( self.autoLight_ToggleBtn, 0, wx.ALL, 5 )
+		self.autoLight1_ToggleBtn = wx.ToggleButton( sbSizer22.GetStaticBox(), wx.ID_ANY, u"AUTO", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer22.Add( self.autoLight1_ToggleBtn, 0, wx.ALL, 5 )
 		
 		
 		sbSizer22.Add( gSizer22, 1, wx.EXPAND, 5 )
@@ -273,10 +281,109 @@ class GuiFrame ( wx.Frame ):
 		bSizer61.Add( sbSizer22, 1, wx.EXPAND, 5 )
 		
 		
-		self.light_Panel.SetSizer( bSizer61 )
-		self.light_Panel.Layout()
-		bSizer61.Fit( self.light_Panel )
-		self.notebook.AddPage( self.light_Panel, u"Light", False )
+		self.light1_Panel.SetSizer( bSizer61 )
+		self.light1_Panel.Layout()
+		bSizer61.Fit( self.light1_Panel )
+		self.notebook.AddPage( self.light1_Panel, u"Light 1", False )
+		self.light2_Panel = wx.Panel( self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		bSizer7 = wx.BoxSizer( wx.VERTICAL )
+		
+		sbSizer221 = wx.StaticBoxSizer( wx.StaticBox( self.light2_Panel, wx.ID_ANY, u"Stage 1" ), wx.VERTICAL )
+		
+		gSizer23 = wx.GridSizer( 0, 2, 0, 0 )
+		
+		self.light2Stage1On_Label = wx.StaticText( sbSizer221.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage1On_Label.Wrap( -1 )
+		gSizer23.Add( self.light2Stage1On_Label, 0, wx.ALL, 5 )
+		
+		self.light2Stage1On_Display = wx.StaticText( sbSizer221.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage1On_Display.Wrap( -1 )
+		gSizer23.Add( self.light2Stage1On_Display, 0, wx.ALL, 5 )
+		
+		self.light2Stage1Off_Label = wx.StaticText( sbSizer221.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage1Off_Label.Wrap( -1 )
+		gSizer23.Add( self.light2Stage1Off_Label, 0, wx.ALL, 5 )
+		
+		self.light2Stage1Off_Display = wx.StaticText( sbSizer221.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage1Off_Display.Wrap( -1 )
+		gSizer23.Add( self.light2Stage1Off_Display, 0, wx.ALL, 5 )
+		
+		
+		sbSizer221.Add( gSizer23, 1, wx.EXPAND, 5 )
+		
+		
+		bSizer7.Add( sbSizer221, 1, wx.EXPAND, 5 )
+		
+		sbSizer23 = wx.StaticBoxSizer( wx.StaticBox( self.light2_Panel, wx.ID_ANY, u"Stage 2" ), wx.VERTICAL )
+		
+		gSizer24 = wx.GridSizer( 0, 2, 0, 0 )
+		
+		self.light2Stage2On_Label = wx.StaticText( sbSizer23.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage2On_Label.Wrap( -1 )
+		gSizer24.Add( self.light2Stage2On_Label, 0, wx.ALL, 5 )
+		
+		self.light2Stage2On_Display = wx.StaticText( sbSizer23.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage2On_Display.Wrap( -1 )
+		gSizer24.Add( self.light2Stage2On_Display, 0, wx.ALL, 5 )
+		
+		self.light2Stage2Off_Label = wx.StaticText( sbSizer23.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage2Off_Label.Wrap( -1 )
+		gSizer24.Add( self.light2Stage2Off_Label, 0, wx.ALL, 5 )
+		
+		self.light2Stage2Off_Display = wx.StaticText( sbSizer23.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage2Off_Display.Wrap( -1 )
+		gSizer24.Add( self.light2Stage2Off_Display, 0, wx.ALL, 5 )
+		
+		
+		sbSizer23.Add( gSizer24, 1, wx.EXPAND, 5 )
+		
+		
+		bSizer7.Add( sbSizer23, 1, wx.EXPAND, 5 )
+		
+		sbSizer24 = wx.StaticBoxSizer( wx.StaticBox( self.light2_Panel, wx.ID_ANY, u"Stage 3" ), wx.VERTICAL )
+		
+		gSizer25 = wx.GridSizer( 0, 2, 0, 0 )
+		
+		self.light2Stage3On_Label = wx.StaticText( sbSizer24.GetStaticBox(), wx.ID_ANY, u"On", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage3On_Label.Wrap( -1 )
+		gSizer25.Add( self.light2Stage3On_Label, 0, wx.ALL, 5 )
+		
+		self.light2Stage3On_Display = wx.StaticText( sbSizer24.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage3On_Display.Wrap( -1 )
+		gSizer25.Add( self.light2Stage3On_Display, 0, wx.ALL, 5 )
+		
+		self.light2Stage3Off_Label = wx.StaticText( sbSizer24.GetStaticBox(), wx.ID_ANY, u"Off", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage3Off_Label.Wrap( -1 )
+		gSizer25.Add( self.light2Stage3Off_Label, 0, wx.ALL, 5 )
+		
+		self.light2Stage3Off_Display = wx.StaticText( sbSizer24.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.light2Stage3Off_Display.Wrap( -1 )
+		gSizer25.Add( self.light2Stage3Off_Display, 0, wx.ALL, 5 )
+		
+		
+		sbSizer24.Add( gSizer25, 1, wx.EXPAND, 5 )
+		
+		
+		bSizer7.Add( sbSizer24, 1, wx.EXPAND, 5 )
+		
+		sbSizer25 = wx.StaticBoxSizer( wx.StaticBox( self.light2_Panel, wx.ID_ANY, u"Control" ), wx.VERTICAL )
+		
+		gSizer26 = wx.GridSizer( 0, 2, 0, 0 )
+		
+		self.autoLight2_ToggleBtn = wx.ToggleButton( sbSizer25.GetStaticBox(), wx.ID_ANY, u"AUTO", wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer26.Add( self.autoLight2_ToggleBtn, 0, wx.ALL, 5 )
+		
+		
+		sbSizer25.Add( gSizer26, 1, wx.EXPAND, 5 )
+		
+		
+		bSizer7.Add( sbSizer25, 1, wx.EXPAND, 5 )
+		
+		
+		self.light2_Panel.SetSizer( bSizer7 )
+		self.light2_Panel.Layout()
+		bSizer7.Fit( self.light2_Panel )
+		self.notebook.AddPage( self.light2_Panel, u"Light 2", False )
 		self.p1_Panel = wx.Panel( self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer2 = wx.BoxSizer( wx.VERTICAL )
 		
@@ -300,13 +407,13 @@ class GuiFrame ( wx.Frame ):
 		self.pump1Stage1Drain_Display.Wrap( -1 )
 		gSizer6.Add( self.pump1Stage1Drain_Display, 0, wx.ALL, 5 )
 		
-		self.pump1Stage1Duration_Label = wx.StaticText( sbSizer5.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pump1Stage1Duration_Label.Wrap( -1 )
-		gSizer6.Add( self.pump1Stage1Duration_Label, 0, wx.ALL, 5 )
+		self.ch1Stage1Duration_Label = wx.StaticText( sbSizer5.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1Stage1Duration_Label.Wrap( -1 )
+		gSizer6.Add( self.ch1Stage1Duration_Label, 0, wx.ALL, 5 )
 		
-		self.stage1Duration_Display = wx.StaticText( sbSizer5.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.stage1Duration_Display.Wrap( -1 )
-		gSizer6.Add( self.stage1Duration_Display, 0, wx.ALL, 5 )
+		self.ch1Stage1Duration_Display = wx.StaticText( sbSizer5.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1Stage1Duration_Display.Wrap( -1 )
+		gSizer6.Add( self.ch1Stage1Duration_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer5.Add( gSizer6, 1, wx.EXPAND, 5 )
@@ -334,13 +441,13 @@ class GuiFrame ( wx.Frame ):
 		self.pump1Stage2Drain_Display.Wrap( -1 )
 		gSizer7.Add( self.pump1Stage2Drain_Display, 0, wx.ALL, 5 )
 		
-		self.pump1Stage2Duration_Label = wx.StaticText( sbSizer6.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pump1Stage2Duration_Label.Wrap( -1 )
-		gSizer7.Add( self.pump1Stage2Duration_Label, 0, wx.ALL, 5 )
+		self.ch1Stage2Duration_Label = wx.StaticText( sbSizer6.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1Stage2Duration_Label.Wrap( -1 )
+		gSizer7.Add( self.ch1Stage2Duration_Label, 0, wx.ALL, 5 )
 		
-		self.stage2Duration_Display = wx.StaticText( sbSizer6.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.stage2Duration_Display.Wrap( -1 )
-		gSizer7.Add( self.stage2Duration_Display, 0, wx.ALL, 5 )
+		self.ch1Stage2Duration_Display = wx.StaticText( sbSizer6.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1Stage2Duration_Display.Wrap( -1 )
+		gSizer7.Add( self.ch1Stage2Duration_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer6.Add( gSizer7, 1, wx.EXPAND, 5 )
@@ -368,13 +475,13 @@ class GuiFrame ( wx.Frame ):
 		self.pump1Stage3Drain_Display.Wrap( -1 )
 		gSizer8.Add( self.pump1Stage3Drain_Display, 0, wx.ALL, 5 )
 		
-		self.pump1Stage3Duration_Label = wx.StaticText( sbSizer7.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.pump1Stage3Duration_Label.Wrap( -1 )
-		gSizer8.Add( self.pump1Stage3Duration_Label, 0, wx.ALL, 5 )
+		self.ch1Stage3Duration_Label = wx.StaticText( sbSizer7.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1Stage3Duration_Label.Wrap( -1 )
+		gSizer8.Add( self.ch1Stage3Duration_Label, 0, wx.ALL, 5 )
 		
-		self.stage3Duration_Display = wx.StaticText( sbSizer7.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.stage3Duration_Display.Wrap( -1 )
-		gSizer8.Add( self.stage3Duration_Display, 0, wx.ALL, 5 )
+		self.ch1Stage3Duration_Display = wx.StaticText( sbSizer7.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch1Stage3Duration_Display.Wrap( -1 )
+		gSizer8.Add( self.ch1Stage3Duration_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer7.Add( gSizer8, 1, wx.EXPAND, 5 )
@@ -423,6 +530,14 @@ class GuiFrame ( wx.Frame ):
 		self.pump2Stage1Drain_Display.Wrap( -1 )
 		gSizer61.Add( self.pump2Stage1Drain_Display, 0, wx.ALL, 5 )
 		
+		self.ch2Stage1Duration_Label = wx.StaticText( sbSizer51.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2Stage1Duration_Label.Wrap( -1 )
+		gSizer61.Add( self.ch2Stage1Duration_Label, 0, wx.ALL, 5 )
+		
+		self.ch2Stage1Duration_Display = wx.StaticText( sbSizer51.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2Stage1Duration_Display.Wrap( -1 )
+		gSizer61.Add( self.ch2Stage1Duration_Display, 0, wx.ALL, 5 )
+		
 		
 		sbSizer51.Add( gSizer61, 1, wx.EXPAND, 5 )
 		
@@ -449,6 +564,14 @@ class GuiFrame ( wx.Frame ):
 		self.pump2Stage2Drain_Display.Wrap( -1 )
 		gSizer71.Add( self.pump2Stage2Drain_Display, 0, wx.ALL, 5 )
 		
+		self.ch2Stage2Duration_Label = wx.StaticText( sbSizer61.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2Stage2Duration_Label.Wrap( -1 )
+		gSizer71.Add( self.ch2Stage2Duration_Label, 0, wx.ALL, 5 )
+		
+		self.ch2Stage2Duration_Display = wx.StaticText( sbSizer61.GetStaticBox(), wx.ID_ANY, u"no data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2Stage2Duration_Display.Wrap( -1 )
+		gSizer71.Add( self.ch2Stage2Duration_Display, 0, wx.ALL, 5 )
+		
 		
 		sbSizer61.Add( gSizer71, 1, wx.EXPAND, 5 )
 		
@@ -474,6 +597,14 @@ class GuiFrame ( wx.Frame ):
 		self.pump2Stage3Drain_Display = wx.StaticText( sbSizer71.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.pump2Stage3Drain_Display.Wrap( -1 )
 		gSizer81.Add( self.pump2Stage3Drain_Display, 0, wx.ALL, 5 )
+		
+		self.ch2Stage3Duration_Label = wx.StaticText( sbSizer71.GetStaticBox(), wx.ID_ANY, u"Stage Duration", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2Stage3Duration_Label.Wrap( -1 )
+		gSizer81.Add( self.ch2Stage3Duration_Label, 0, wx.ALL, 5 )
+		
+		self.ch2Stage3Duration_Display = wx.StaticText( sbSizer71.GetStaticBox(), wx.ID_ANY, u"No data", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.ch2Stage3Duration_Display.Wrap( -1 )
+		gSizer81.Add( self.ch2Stage3Duration_Display, 0, wx.ALL, 5 )
 		
 		
 		sbSizer71.Add( gSizer81, 1, wx.EXPAND, 5 )
@@ -593,7 +724,7 @@ class GuiFrame ( wx.Frame ):
 		self.sensors_Panel.SetSizer( bSizer5 )
 		self.sensors_Panel.Layout()
 		bSizer5.Fit( self.sensors_Panel )
-		self.notebook.AddPage( self.sensors_Panel, u"Sensors", False )
+		self.notebook.AddPage( self.sensors_Panel, u"Sensors", True )
 		self.doser_Panel = wx.Panel( self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 		
@@ -711,7 +842,8 @@ class GuiFrame ( wx.Frame ):
 		self.loadRecipe_Btn.Bind( wx.EVT_BUTTON, self.LoadRecipe )
 		self.loadLog_Btn.Bind( wx.EVT_BUTTON, self.LoadLog )
 		self.autoLog_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.ToggleLog )
-		self.autoLight_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLightFields )
+		self.autoLight1_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLight1Fields )
+		self.autoLight2_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLight2Fields )
 		self.autoPump1_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckIrrigation1Fields )
 		self.autoPump2_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckIrrigation2Fields )
 		self.updateSensorsInterval_Btn.Bind( wx.EVT_BUTTON, self.UpdateSensorsIntervals )
@@ -742,7 +874,10 @@ class GuiFrame ( wx.Frame ):
 	def ToggleLog( self, event ):
 		event.Skip()
 	
-	def CheckLightFields( self, event ):
+	def CheckLight1Fields( self, event ):
+		event.Skip()
+	
+	def CheckLight2Fields( self, event ):
 		event.Skip()
 	
 	def CheckIrrigation1Fields( self, event ):
