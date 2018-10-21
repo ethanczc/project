@@ -15,7 +15,7 @@ class Irrigation(gui.GuiFrame):
 		self.timeNow, self.dateNow = '', ''
 		self.serIrrigation = serial.Serial(timeout=0) # create serial object without port address first
 		self.serIrrigation.baudrate = 9600 #set serial baudrate
-		self.serDoser = serial.Serial() # create serial object without port address first
+		self.serDoser = serial.Serial(timeout=0) # create serial object without port address first
 		self.serDoser.baudrate = 9600 #set serial baudrate
 		self.logFile = '' #empty address
 
@@ -48,7 +48,7 @@ class Irrigation(gui.GuiFrame):
 		self.DoserCheck()
 		self.LightCheck()
 		self.CheckIncomingIrrigationSerial()
-		#self.CheckIncomingDoserSerial()
+		self.CheckIncomingDoserSerial()
 
 	def TimeDateDisplay(self):
 		self.timeNow = time.strftime('%H:%M:%S')
@@ -452,14 +452,14 @@ class Irrigation(gui.GuiFrame):
 			pass
 		else:
 			self.SerialDataProcessor(rawData)
-			print(rawData)
 
 	def CheckIncomingDoserSerial(self):
 		try:
-			rawData = self.serDoser.readLine()
-			self.SerialDataProcessor(rawData)
+			rawData = self.serDoser.readline()
 		except:
 			pass
+		else:
+			self.SerialDataProcessor(rawData)
 			
 	def SerialDataProcessor(self,rawData):
 		try:
@@ -505,7 +505,7 @@ class Irrigation(gui.GuiFrame):
 
 	def ShowHumidity(self,humidity):
 		self.humidity = humidity
-		self.humidity_Display.SetLabel(self.humidity)
+		self.humidity_Display.SetLabel(str(self.humidity))
 
 	def UpdateSensorsIntervals(self,event):
 		if self.tempInterval_Txtctrl.GetValue() != '' and self.humidityInterval_Txtctrl.GetValue() != '':
