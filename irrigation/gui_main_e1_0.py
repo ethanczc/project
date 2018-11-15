@@ -120,8 +120,9 @@ class GuiFrame ( wx.Frame ):
 		self.ConnectMqtt = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer3.Add( self.ConnectMqtt, 0, wx.ALL, 5 )
 		
-		self.m_staticline1 = wx.StaticLine( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-		gSizer3.Add( self.m_staticline1, 0, wx.EXPAND |wx.ALL, 5 )
+		self.mqttStatus_Display = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Not Connected", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.mqttStatus_Display.Wrap( -1 )
+		gSizer3.Add( self.mqttStatus_Display, 0, wx.ALL, 5 )
 		
 		self.sendMqtt_Btn = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Send", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer3.Add( self.sendMqtt_Btn, 0, wx.ALL, 5 )
