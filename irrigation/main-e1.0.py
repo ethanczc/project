@@ -78,6 +78,7 @@ class Irrigation(gui.GuiFrame):
 		self.client.on_message = self.on_message
 		self.client.connect(self.host, 1883, 60)
 		self.client.loop_start()
+		self.mqttStatus_Display.SetLabel('Connected')
 
 	def SendMQTT(self,event):
 		message = self.sendMqtt_Txtctrl.GetValue()
