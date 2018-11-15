@@ -134,7 +134,7 @@ class Irrigation(gui.GuiFrame):
 			self.ch2CurrentStage_Display.SetLabel(str(self.ch2CurrentStage))
 
 			''' dwc-added stage calculation start'''
-			if daysPass <= self.dwcStage1Duration:
+			if daysPassed <= self.dwcStage1Duration:
 				self.dwcCurrentStage = 1
 			elif self.dwcStage1Duration <= daysPassed <= (self.dwcStage1Duration + self.dwcStage2Duration):
 				self.dwcCurrentStage = 2
