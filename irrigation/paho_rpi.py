@@ -61,8 +61,9 @@ def CheckData(dataType,dataValue):
 	message = '{} {}'.format(dataType,dataValue)
 
 	if serial_1 == True:
-		if dataType == 'PU1' or dataType == 'PU2' or dataType == 'DR1' or dataType == 'DR2'\
-		or dataType == 'LT1' or dataType == 'LT2':
+		if dataType == 'PU1' or dataType == 'PU2' or dataType == 'PU3' or dataType == 'PU4'\
+		or dataType == 'DR1' or dataType == 'DR2' or dataType == 'DR3' or dataType == 'DR4'\
+		or dataType == 'PU0' or dataType == 'DR0':
 			print('ser1: {}'.format(message))
 			ser1.write(message.encode())
 		
