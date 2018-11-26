@@ -28,18 +28,21 @@ except:
 	pass
 else:
 	serial_1 = True
+	print('ser 1 connected')
 try:
 	ser2 = serial.Serial('/dev/ttyUSB1',9600)
 except:
 	pass
 else:
 	serial_2 = True
+	print('ser 2 connected')
 try:
 	ser3 = serial.Serial('/dev/ttyUSB2',9600)
 except:
 	pass
 else:
 	serial_3 = True
+	print('ser 3 connected')
  
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -67,14 +70,14 @@ def CheckData(dataType,dataValue):
 			print('ser1: {}'.format(message))
 			ser1.write(message.encode())
 		
-	elif serial_2 == True:
+	if serial_2 == True:
 		if dataType == 'LP1' or dataType == 'LP2' or dataType == 'LP3' or dataType == 'LP4'\
 		or dataType == 'LD1' or dataType == 'LD2' or dataType == 'LD3' or dataType == 'LD4'\
 		or dataType == 'EN' or dataType == 'DA' or dataType == 'HM':
 			print('ser2: {}'.format(message))
 			ser2.write(message.encode())
 
-	elif serial_3 == True:
+	if serial_3 == True:
 		if dataType == 'NP' or dataType == 'EC' or dataType == 'AEC' or dataType == 'PU'\
 		or dataType == 'AP' or dataType == 'BP' or dataType == 'NPA' or dataType == 'NPB':
 			print('ser3: {}'.format(message))
