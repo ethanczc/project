@@ -68,14 +68,14 @@ def CheckData(dataType,dataValue):
 		
 	elif serial_2 == True:
 		if dataType == 'LP1' or dataType == 'LP2' or dataType == 'LP3' or dataType == 'LP4'\
-		or dataType == 'LD1' or dataType == 'LD2' or dataType == 'LD3' or dataType == 'LD4':
+		or dataType == 'LD1' or dataType == 'LD2' or dataType == 'LD3' or dataType == 'LD4'\
+		or dataType == 'EN' or dataType == 'DA' or dataType == 'HM':
 			print('ser2: {}'.format(message))
 			ser2.write(message.encode())
 
 	elif serial_3 == True:
 		if dataType == 'NP' or dataType == 'EC' or dataType == 'AEC' or dataType == 'PU'\
-		or dataType == 'AP' or dataType == 'BP' or dataType == 'NPA' or dataType == 'NPB'\
-		or dataType == 'EN' or dataType == 'DA' or dataType == 'HM':
+		or dataType == 'AP' or dataType == 'BP' or dataType == 'NPA' or dataType == 'NPB':
 			print('ser3: {}'.format(message))
 			ser3.write(message.encode())
 
