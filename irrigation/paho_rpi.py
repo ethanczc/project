@@ -9,9 +9,8 @@ MQTT to serial handler for Raspberry Pi
 Headless display, SSH from computer
 plug in USB ports as follows:
 	/dev/ttyUSB0 -> irrigation
-	/dev/ttyUSB1 -> doser
-	/dev/ttyUSB2 -> DWC
-	/dev/ttyUSB3 -> LED
+	/dev/ttyUSB1 -> LED
+	/dev/ttyUSB2 -> doser
 identify port addresses and ensure sequence is accurate before running code
 '''
 
@@ -22,7 +21,6 @@ sensorsTopic = 'RACK1S' # topic to publish to
 serial_1 = False
 serial_2 = False
 serial_3 = False
-serial_4 = False
 
 try:
 	ser1 = serial.Serial('/dev/ttyUSB1',9600)
@@ -42,12 +40,6 @@ except:
 	pass
 else:
 	serial_3 = True
-try:
-	ser4 = serial.Serial('/dev/ttyUSB3',9600)
-except:
-	pass
-else:
-	serial_4 = True
  
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -73,22 +65,19 @@ def CheckData(dataType,dataValue):
 		or dataType == 'LT1' or dataType == 'LT2':
 			print('ser1: {}'.format(message))
 			ser1.write(message.encode())
-
+		
 	elif serial_2 == True:
-		if dataType == 'NP' or dataType == 'EC' or dataType == 'AEC' or dataType == 'PU'\
-		or dataType == 'AP' or dataType == 'BP' or dataType == 'NPA' or dataType == 'NPB':
+		if dataType == 'LP1' or dataType == 'LP2' or dataType == 'LP3' or dataType == 'LP4'\
+		or dataType == 'LD1' or dataType == 'LD2' or dataType == 'LD3' or dataType == 'LD4':
 			print('ser2: {}'.format(message))
 			ser2.write(message.encode())
 
 	elif serial_3 == True:
-		if dataType == 'DWC1' or dataType == 'DWC2' or dataType == 'DWC3' or dataType == 'DWC4':
+		if dataType == 'NP' or dataType == 'EC' or dataType == 'AEC' or dataType == 'PU'\
+		or dataType == 'AP' or dataType == 'BP' or dataType == 'NPA' or dataType == 'NPB'\
+		or dataType == 'EN' or dataType == 'DA' or dataType == 'HM':
 			print('ser3: {}'.format(message))
 			ser3.write(message.encode())
-
-	elif serial_4 == True:
-		if dataType == 'ALT1' or dataType == 'ALT2' or dataType == 'ALT3' or dataType == 'ALT4':
-			print('ser4: {}'.format(message))
-			ser4.write(message.encode())
 
 	else:
 		print('unknown command: {} {}'.format(dataType,dataValue))
@@ -104,9 +93,9 @@ def ListenSerial():
 				pass
 			else:
 				ProcessData(rawData)
-		if serial_2 == True:
+		if serial_3 == True:
 			try:
-				rawData = ser2.readline()
+				rawData = ser3.readline()
 			except:
 				pass
 			else:
@@ -123,7 +112,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-incomingSerial_Thread = threading.Thread(name='check serial2', target=ListenSerial, daemon = True)
+incomingSerial_Thread = threading.Thread(name='check serial', target=ListenSerial, daemon = True)
 incomingSerial_Thread.start()
 
 client.connect(host, 1883, 60)
