@@ -23,13 +23,13 @@ serial_2 = False
 serial_3 = False
 
 try:
-	ser1 = serial.Serial('/dev/ttyUSB1',9600)
+	ser1 = serial.Serial('/dev/ttyUSB0',9600)
 except:
 	pass
 else:
 	serial_1 = True
 try:
-	ser2 = serial.Serial('/dev/ttyUSB0',9600)
+	ser2 = serial.Serial('/dev/ttyUSB1',9600)
 except:
 	pass
 else:
