@@ -3,8 +3,7 @@ raspberry pi (computer user interface) for arduino uno (controller)
 
 raspberry pi serial_test\
 tkinter GUI\
-wxpython\
+wxpython GUI\
 serial communication\
 time keeping (internet)\
-ethernet mqtt\
-
+ethernet mqtt paho\
