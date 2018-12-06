@@ -292,7 +292,8 @@ class Irrigation(gui.GuiFrame):
 			if self.currentStage == 1:
 				for thisTime in self.stage1LedOn:
 					if thisTime == self.timeNow:
-						#self.LightPwrFunction(0,self.stage1LedPwr)
+						self.LightPwrFunction(0,self.stage1LedPwr)
+						time.sleep(2)
 						self.LightDistFunction(0,self.stage1LedDist)
 				for thisTime in self.stage1LedOff:
 					if thisTime == self.timeNow:
@@ -301,6 +302,7 @@ class Irrigation(gui.GuiFrame):
 				for thisTime in self.stage2LedOn:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,self.stage2LedPwr)
+						time.sleep(2)
 						self.LightDistFunction(0,self.stage2LedDist)
 				for thisTime in self.stage2LedOff:
 					if thisTime == self.timeNow:
@@ -309,6 +311,7 @@ class Irrigation(gui.GuiFrame):
 				for thisTime in self.stage3LedOn:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,self.stage3LedPwr)
+						time.sleep(2)
 						self.LightDistFunction(0,self.stage3LedDist)
 				for thisTime in self.stage3LedOff:
 					if thisTime == self.timeNow:
