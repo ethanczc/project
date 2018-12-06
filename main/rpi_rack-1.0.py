@@ -87,38 +87,8 @@ def CheckData(dataType,dataValue):
 	else:
 		print('unknown command: {} {}'.format(dataType,dataValue))
 
-def ListenSerial():
-	'''seperate thread to listen to serial doser for AEC and EC feedback and pass to computer
-		also to listen to serial irrigation for PWS (photoelectric water sensor)'''
-	while True:
-		if serial_1 == True:
-			try:
-				rawData = ser1.readline()
-			except:
-				pass
-			else:
-				ProcessData(rawData)
-		if serial_3 == True:
-			try:
-				rawData = ser3.readline()
-			except:
-				pass
-			else:
-				ProcessData(rawData)
-
-def ProcessData(rawData):
-	rawData = rawData.decode('utf-8')
-	rawData = rawData[:-2]
-	data = rawData.split(' ')
-	if data[0] == 'PWS' or data[0] == 'AEC' or data[0] == 'EC':
-		publish.single(sensorsTopic,rawData,hostname=host)
-
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-
-incomingSerial_Thread = threading.Thread(name='check serial', target=ListenSerial, daemon = True)
-incomingSerial_Thread.start()
-
 client.connect(host, 1883, 60)
 client.loop_forever()
