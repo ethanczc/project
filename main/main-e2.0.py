@@ -40,7 +40,8 @@ class Irrigation(gui.GuiFrame):
 
 		self.currentStage = 0
 		self.stage1Duration, self.stage2Duration, self.stage3Duration = 0, 0, 0
-		self.ec = 0
+		self.ec = 0.0
+		self.tankSize = 6000
 
 	def Tick(self,parent):
 		self.TimeDateDisplay()
@@ -71,7 +72,9 @@ class Irrigation(gui.GuiFrame):
 		messageRecieved = str(msg.payload)
 		messageRecieved = messageRecieved[2:-1]
 		message = messageRecieved.split(' ')
-		self.CheckMQTTMessage(message[0],message[1])
+		dataType = message[0]
+		dataValue = float(message[1])
+		self.CheckMQTTMessage(dataType,dataValue)
 
 	def TimeDateDisplay(self):
 		self.timeNow = time.strftime('%H:%M:%S')
@@ -159,10 +162,10 @@ class Irrigation(gui.GuiFrame):
 				self.stage1LedOff = value.split(',')
 				self.stage1LedOff_Display.SetLabel(str(self.stage1LedOff))
 			if parameter == 'stage1_led_pwr':
-				self.stage1LedPwr = value.split(',')
+				self.stage1LedPwr = int(value)
 				self.stage1LedPwr_Display.SetLabel(str(self.stage1LedPwr))
 			if parameter == 'stage1_led_dist':
-				self.stage1LedDist = value.split(',')
+				self.stage1LedDist = int(value)
 				self.stage1LedDist_Display.SetLabel(str(self.stage1LedDist))
 			if parameter == 'stage2_led_on':
 				self.stage2LedOn = value.split(',')
@@ -171,10 +174,10 @@ class Irrigation(gui.GuiFrame):
 				self.stage2LedOff = value.split(',')
 				self.stage2LedOff_Display.SetLabel(str(self.stage2LedOff))
 			if parameter == 'stage2_led_pwr':
-				self.stage2LedPwr = value.split(',')
+				self.stage2LedPwr = int(value)
 				self.stage2LedPwr_Display.SetLabel(str(self.stage2LedPwr))
 			if parameter == 'stage2_led_dist':
-				self.stage2LedDist = value.split(',')
+				self.stage2LedDist = int(value)
 				self.stage2LedDist_Display.SetLabel(str(self.stage2LedDist))
 			if parameter == 'stage3_led_on':
 				self.stage3LedOn = value.split(',')
@@ -183,10 +186,10 @@ class Irrigation(gui.GuiFrame):
 				self.stage3LedOff = value.split(',')
 				self.stage3LedOff_Display.SetLabel(str(self.stage3LedOff))
 			if parameter == 'stage3_led_pwr':
-				self.stage3LedPwr = value.split(',')
+				self.stage3LedPwr = int(value)
 				self.stage3LedPwr_Display.SetLabel(str(self.stage3LedPwr))
 			if parameter == 'stage3_led_dist':
-				self.stage3LedDist = value.split(',')
+				self.stage3LedDist = int(value)
 				self.stage3LedDist_Display.SetLabel(str(self.stage3LedDist))
 			if parameter == 'stage1_ec':
 				self.stage1Ec = float(value)
@@ -289,8 +292,8 @@ class Irrigation(gui.GuiFrame):
 			if self.currentStage == 1:
 				for thisTime in self.stage1LedOn:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(0,self.stage1LedPwr)
-						self.LightDistFunction(0,self.stage1Dist)
+						#self.LightPwrFunction(0,self.stage1LedPwr)
+						self.LightDistFunction(0,self.stage1LedDist)
 				for thisTime in self.stage1LedOff:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,0)
@@ -298,7 +301,7 @@ class Irrigation(gui.GuiFrame):
 				for thisTime in self.stage2LedOn:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,self.stage2LedPwr)
-						self.LightDistFunction(0,self.stage2Dist)
+						self.LightDistFunction(0,self.stage2LedDist)
 				for thisTime in self.stage2LedOff:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,0)
@@ -306,7 +309,7 @@ class Irrigation(gui.GuiFrame):
 				for thisTime in self.stage3LedOn:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,self.stage3LedPwr)
-						self.LightDistFunction(0,self.stage3Dist)
+						self.LightDistFunction(0,self.stage3LedDist)
 				for thisTime in self.stage3LedOff:
 					if thisTime == self.timeNow:
 						self.LightPwrFunction(0,0)
@@ -335,10 +338,10 @@ class Irrigation(gui.GuiFrame):
 					if thisTime == self.timeNow:
 						self.DrainFunction(1,1)
 
-	def LightPwrFunction(self,light,state):
+	def LightPwrFunction(self,light,power):
 		self.PublishToCommandTopic('LP{} {}'.format(light,power))
 
-	def LightDistFunction(self,light,state):
+	def LightDistFunction(self,light,distance):
 		self.PublishToCommandTopic('LD{} {}'.format(light,distance))
 
 	def PumpFunction(self,pump,state):
@@ -363,12 +366,9 @@ class Irrigation(gui.GuiFrame):
 			self.led_ToggleBtn.SetValue(False)
 
 	def CheckMQTTMessage(self,dataType,dataValue):
-		if dataType == 'TP1' or dataType == 'TP2':
-			self.ShowTemperature(dataType,dataValue)
-		elif dataType == 'HM1':
-			self.ShowHumidity(dataValue)
-		elif dataType == 'EC':
+		if dataType == 'EC':
 			self.ec = dataValue
+			print (self.ec)
 		elif dataType == 'AEC':
 			self.ec = dataValue
 			self.EcDose(self.ec)
