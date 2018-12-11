@@ -183,6 +183,13 @@ class GuiFrame ( wx.Frame ):
 		self.led_Txtctrl = wx.TextCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer4.Add( self.led_Txtctrl, 0, wx.ALL, 5 )
 		
+		self.singleChannelMode_Label = wx.StaticText( sbSizer3.GetStaticBox(), wx.ID_ANY, u"Single Channel Mode", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.singleChannelMode_Label.Wrap( -1 )
+		gSizer4.Add( self.singleChannelMode_Label, 0, wx.ALL, 5 )
+		
+		self.singleChannelMode_CheckBox = wx.CheckBox( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer4.Add( self.singleChannelMode_CheckBox, 0, wx.ALL, 5 )
+		
 		
 		sbSizer3.Add( gSizer4, 1, wx.EXPAND, 5 )
 		
@@ -855,12 +862,13 @@ class GuiFrame ( wx.Frame ):
 		self.ConnectMqtt.Bind( wx.EVT_BUTTON, self.ConnectMQTT )
 		self.sendMqtt_Btn.Bind( wx.EVT_BUTTON, self.SendMQTT )
 		self.loadRecipe_Btn.Bind( wx.EVT_BUTTON, self.LoadRecipe )
+		self.singleChannelMode_CheckBox.Bind( wx.EVT_CHECKBOX, self.ActivateSingleChannel )
 		self.loadLog_Btn.Bind( wx.EVT_BUTTON, self.LoadLog )
 		self.autoLog_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.ToggleLog )
-		self.irrigation1_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckIrrigationFields )
-		self.led1_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLedFields )
-		self.irrigation2_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckIrrigationFields )
-		self.led2_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLedFields )
+		self.irrigation1_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckIrrigation1Fields )
+		self.led1_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLed1Fields )
+		self.irrigation2_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckIrrigation2Fields )
+		self.led2_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckLed2Fields )
 		self.doser_ToggleBtn.Bind( wx.EVT_TOGGLEBUTTON, self.CheckDoserFields )
 	
 	def __del__( self ):
@@ -880,19 +888,26 @@ class GuiFrame ( wx.Frame ):
 	def LoadRecipe( self, event ):
 		event.Skip()
 	
+	def ActivateSingleChannel( self, event ):
+		event.Skip()
+	
 	def LoadLog( self, event ):
 		event.Skip()
 	
 	def ToggleLog( self, event ):
 		event.Skip()
 	
-	def CheckIrrigationFields( self, event ):
+	def CheckIrrigation1Fields( self, event ):
 		event.Skip()
 	
-	def CheckLedFields( self, event ):
+	def CheckLed1Fields( self, event ):
 		event.Skip()
 	
+	def CheckIrrigation2Fields( self, event ):
+		event.Skip()
 	
+	def CheckLed2Fields( self, event ):
+		event.Skip()
 	
 	def CheckDoserFields( self, event ):
 		event.Skip()
