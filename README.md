@@ -10,4 +10,4 @@ tkinter GUI\
 wxpython GUI\
 serial communication\
 time keeping (internet)\
-ethernet mqtt paho\
+ethernet mqtt paho
