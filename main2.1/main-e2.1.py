@@ -5,10 +5,9 @@ import datetime
 import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 '''
-new version from 1.0
-Now uses MQTT to issue commands to a command topic 'RACK1'
-and listens to sensors topic 'RACK1S'
-Merge all systems into 1 uniform staged system and 3 modules, irrigation(4 ch), LED(4 ch), and doser
+new version from 2.0
+system is 2 channel system, but able to stick to 1 uniform channel to issue LP0, LD0, PU0 commands
+
 '''
 
 class Irrigation(gui.GuiFrame):
@@ -363,34 +362,37 @@ class Irrigation(gui.GuiFrame):
 			self.PublishToCommandTopic('NP {}'.format(nutrientVolume/2))
 
 	def LightCheck1(self):
+		channel = 1
+		if self.singleChannelMode_CheckBox.GetValue() == True:
+			channel = 0
 		if self.led1_ToggleBtn.GetValue() == True:
 			if self.currentStage == 1:
 				for thisTime in self.stage1Led1On:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(1,self.stage1Led1Pwr)
+						self.LightPwrFunction(channel,self.stage1Led1Pwr)
 						time.sleep(2)
-						self.LightDistFunction(1,self.stage1Led1Dist)
+						self.LightDistFunction(channel,self.stage1Led1Dist)
 				for thisTime in self.stage1Led1Off:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(1,0)
+						self.LightPwrFunction(channel,0)
 			elif self.currentStage == 2:
 				for thisTime in self.stage2Led1On:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(1,self.stage2Led1Pwr)
+						self.LightPwrFunction(channel,self.stage2Led1Pwr)
 						time.sleep(2)
-						self.LightDistFunction(1,self.stage2Led1Dist)
+						self.LightDistFunction(channel,self.stage2Led1Dist)
 				for thisTime in self.stage2Led1Off:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(1,0)
+						self.LightPwrFunction(channel,0)
 			elif self.currentStage == 3:
 				for thisTime in self.stage3Led1On:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(1,self.stage3Led1Pwr)
+						self.LightPwrFunction(channel,self.stage3Led1Pwr)
 						time.sleep(2)
-						self.LightDistFunction(1,self.stage3Led1Dist)
+						self.LightDistFunction(channel,self.stage3Led1Dist)
 				for thisTime in self.stage3Led1Off:
 					if thisTime == self.timeNow:
-						self.LightPwrFunction(1,0)
+						self.LightPwrFunction(channel,0)
 
 	def LightCheck2(self):
 		if self.led2_ToggleBtn.GetValue() == True:
@@ -423,28 +425,31 @@ class Irrigation(gui.GuiFrame):
 						self.LightPwrFunction(2,0)
 
 	def IrrigationCheck1(self):
+		channel = 1
+		if self.singleChannelMode_CheckBox.GetValue() == True:
+			channel = 0
 		if self.irrigation1_ToggleBtn.GetValue() == True:
 			if self.currentStage == 1:
 				for thisTime in self.stage1Fill1:
 					if thisTime == self.timeNow:
-						self.PumpFunction(1,1)
+						self.PumpFunction(channel,1)
 				for thisTime in self.stage1Drain1:
 					if thisTime == self.timeNow:
-						self.DrainFunction(1,1)
+						self.DrainFunction(channel,1)
 			elif self.currentStage == 2:
 				for thisTime in self.stage2Fill1:
 					if thisTime == self.timeNow:
-						self.PumpFunction(1,1)
+						self.PumpFunction(channel,1)
 				for thisTime in self.stage2Drain1:
 					if thisTime == self.timeNow:
-						self.DrainFunction(1,1)
+						self.DrainFunction(channel,1)
 			elif self.currentStage == 3:
 				for thisTime in self.stage3Fill1:
 					if thisTime == self.timeNow:
-						self.PumpFunction(1,1)
+						self.PumpFunction(channel,1)
 				for thisTime in self.stage3Drain1:
 					if thisTime == self.timeNow:
-						self.DrainFunction(1,1)
+						self.DrainFunction(channel,1)
 
 	def IrrigationCheck2(self):
 		if self.irrigation2_ToggleBtn.GetValue() == True:
@@ -482,20 +487,37 @@ class Irrigation(gui.GuiFrame):
 	def DrainFunction(self,drain,state):
 		self.PublishToCommandTopic('DR{} {}'.format(drain,state))
 
-	def CheckIrrigationFields(self,event):
+	def ActivateSingleChannel(self,event):
+		'''when single channel mode check box is ticked, disable auto for
+		irrigation2 and led2 '''
+		if self.singleChannelMode_CheckBox.GetValue() == True:
+			self.irrigation2_ToggleBtn.SetValue(False)
+			self.led2_ToggleBtn.SetValue(False)
+
+	def CheckIrrigation1Fields(self,event):
 		if not self.stage1Fill1:
 			print ('unable to AUTO')
 			self.irrigation1_ToggleBtn.SetValue(False)
+
+	def CheckLed1Fields(self,event):
+		if not self.stage1Led1On:
+			print('unable to AUTO')
+			self.led1_ToggleBtn.SetValue(False)
+
+	def CheckIrrigation2Fields(self,event):
+		if not self.stage1Fill2 or self.singleChannelMode_CheckBox.GetValue() == True:
+			print ('unable to AUTO')
+			self.irrigation2_ToggleBtn.SetValue(False)
+
+	def CheckLed2Fields(self,event):
+		if not self.stage1Led2On or self.singleChannelMode_CheckBox.GetValue() == True:
+			print('unable to AUTO')
+			self.led2_ToggleBtn.SetValue(False)
 
 	def CheckDoserFields(self,event):
 		if not self.stage1Topup:
 			print('unable to AUTO')
 			self.doser_ToggleBtn.SetValue(False)
-
-	def CheckLedFields(self,event):
-		if not self.stage1Led1On:
-			print('unable to AUTO')
-			self.led1_ToggleBtn.SetValue(False)
 
 	def CheckMQTTMessage(self,dataType,dataValue):
 		if dataType == 'EC':
