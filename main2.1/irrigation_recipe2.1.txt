@@ -15,7 +15,7 @@ stage1_led1_off 17:00:00
 stage1_led1_pwr 50
 stage1_led1_dist 20000
 stage2_led1_on 07:00:00
-stage2_led1_off 19:30:00
+stage2_led1_off 19:00:00
 stage2_led1_pwr 100
 stage2_led1_dist 15000
 stage3_led1_on 07:00:00
