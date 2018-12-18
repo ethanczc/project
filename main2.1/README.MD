@@ -7,10 +7,15 @@
 # Hardware Requirements
 1. Ubuntu Laptop/Desktop (LTS 16.04)
   * wx-python
+  * mosquitto server
   * paho-mqtt
 2. Raspberry pi 3B+ (Raspbian Stretch Lite)
   * serial
+    * `sudo apt-get install python-serial`
+  * mosquitto server
+    * `sudo apt-get install mosquitto mosquitto-clients`
   * paho-mqtt
+    * `sudo pip install paho-mqtt`
 3. Arduino UNO R3
   * software serial
 
@@ -36,3 +41,8 @@
 4. ensure serial cables are plugged into raspberry pi in the correct sequence.
 5. reboot raspberry pi.
 6. run python main-e2.1.py
+
+# Pre-requisites
+1. install pip3\
+`sudo apt-get install python3-pip`
+2. install wxpython
