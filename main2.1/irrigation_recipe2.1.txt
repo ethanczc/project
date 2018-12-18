@@ -4,12 +4,14 @@ run_number 15a
 plant_type lettuce
 led_type L30-00(90_deg)
 start_date 16/10/2018
+---channel_1_irrigation---
 stage1_fill1 08:00:00
 stage1_drain1 08:30:00
 stage2_fill1 08:00:00,12:00:00,17:00:00
 stage2_drain1 08:30:00,12:30:00,17:30:00
 stage3_fill1 08:00:00,12:00:00,16:00:00
 stage3_drain1 10:00:00,14:00:00,18:00:00
+---channel_1_led---
 stage1_led1_on 08:00:00
 stage1_led1_off 17:00:00
 stage1_led1_pwr 50
@@ -22,12 +24,14 @@ stage3_led1_on 07:00:00
 stage3_led1_off 19:00:00
 stage3_led1_pwr 150
 stage3_led1_dist 5000
+---channel_2_irrigation---
 stage1_fill2 08:00:00
 stage1_drain2 08:30:00
 stage2_fill2 08:00:00,12:00:00,17:00:00
 stage2_drain2 08:30:00,12:30:00,17:30:00
 stage3_fill2 08:00:00,12:00:00,16:00:00
 stage3_drain2 10:00:00,14:00:00,18:00:00
+---channel_2_led---
 stage1_led2_on 08:00:00
 stage1_led2_off 17:00:00
 stage1_led2_pwr 50
@@ -40,6 +44,7 @@ stage3_led2_on 07:00:00
 stage3_led2_off 19:00:00
 stage3_led2_pwr 150
 stage3_led2_dist 5000
+---doser---
 stage1_ec 0.5
 stage1_topup 21:00:00
 stage1_dose 21:30:00
@@ -49,6 +54,7 @@ stage2_dose 21:30:00
 stage3_ec 1.0
 stage3_topup 21:00:00
 stage3_dose 21:30:00
+---stage_control---
 stage1_duration 4
 stage2_duration 4
 stage3_duration 40
