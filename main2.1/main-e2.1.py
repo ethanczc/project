@@ -139,168 +139,172 @@ class Irrigation(gui.GuiFrame):
 	def ReadRecipe(self,recipeContent):
 		for line in range (0,len(recipeContent)):
 			thisLine = recipeContent[line][:-1] # splice off \r\n
-			thisLine = thisLine.split(' ') #split line into 2 items in an array
-			parameter = thisLine[0] # allocate 1st item as parameter
-			value = thisLine[1] # allocate 2nd items as value
-			if parameter == 'recipe_name':
-				self.recipe_Display.SetLabel(str(value))
-			if parameter == 'configuration':
-				self.config_Txtctrl.SetValue(value)
-			if parameter == 'run_number':
-				self.run_Txtctrl.SetValue(value)
-			if parameter == 'plant_type':
-				self.plant_Txtctrl.SetValue(value)
-			if parameter == 'led_type':
-				self.led_Txtctrl.SetValue(value)
-			if parameter == 'start_date':
-				self.startDate_Txtctrl.SetValue(value)
-				'''channel 1'''
-			if parameter == 'stage1_fill1':
-				self.stage1Fill1 = value.split(',')
-				self.stage1Fill1_Display.SetLabel(str(self.stage1Fill1))
-			if parameter == 'stage1_drain1':
-				self.stage1Drain1 = value.split(',')
-				self.stage1Drain1_Display.SetLabel(str(self.stage1Drain1))
-			if parameter == 'stage2_fill1':
-				self.stage2Fill1 = value.split(',')
-				self.stage2Fill1_Display.SetLabel(str(self.stage2Fill1))
-			if parameter == 'stage2_drain1':
-				self.stage2Drain1 = value.split(',')
-				self.stage2Drain1_Display.SetLabel(str(self.stage2Drain1))
-			if parameter == 'stage3_fill1':
-				self.stage3Fill1 = value.split(',')
-				self.stage3Fill1_Display.SetLabel(str(self.stage3Fill1))
-			if parameter == 'stage3_drain1':
-				self.stage3Drain1 = value.split(',')
-				self.stage3Drain1_Display.SetLabel(str(self.stage3Drain1))
-			if parameter == 'stage1_led1_on':
-				self.stage1Led1On = value.split(',')
-				self.stage1Led1On_Display.SetLabel(str(self.stage1Led1On))
-			if parameter == 'stage1_led1_off':
-				self.stage1Led1Off = value.split(',')
-				self.stage1Led1Off_Display.SetLabel(str(self.stage1Led1Off))
-			if parameter == 'stage1_led1_pwr':
-				self.stage1Led1Pwr = int(value)
-				self.stage1Led1Pwr_Display.SetLabel(str(self.stage1Led1Pwr))
-			if parameter == 'stage1_led1_dist':
-				self.stage1Led1Dist = int(value)
-				self.stage1Led1Dist_Display.SetLabel(str(self.stage1Led1Dist))
-			if parameter == 'stage2_led1_on':
-				self.stage2Led1On = value.split(',')
-				self.stage2Led1On_Display.SetLabel(str(self.stage2Led1On))
-			if parameter == 'stage2_led1_off':
-				self.stage2Led1Off = value.split(',')
-				self.stage2Led1Off_Display.SetLabel(str(self.stage2Led1Off))
-			if parameter == 'stage2_led1_pwr':
-				self.stage2Led1Pwr = int(value)
-				self.stage2Led1Pwr_Display.SetLabel(str(self.stage2Led1Pwr))
-			if parameter == 'stage2_led1_dist':
-				self.stage2Led1Dist = int(value)
-				self.stage2Led1Dist_Display.SetLabel(str(self.stage2Led1Dist))
-			if parameter == 'stage3_led1_on':
-				self.stage3Led1On = value.split(',')
-				self.stage3Led1On_Display.SetLabel(str(self.stage3Led1On))
-			if parameter == 'stage3_led1_off':
-				self.stage3Led1Off = value.split(',')
-				self.stage3Led1Off_Display.SetLabel(str(self.stage3Led1Off))
-			if parameter == 'stage3_led1_pwr':
-				self.stage3Led1Pwr = int(value)
-				self.stage3Led1Pwr_Display.SetLabel(str(self.stage3Led1Pwr))
-			if parameter == 'stage3_led1_dist':
-				self.stage3Led1Dist = int(value)
-				self.stage3Led1Dist_Display.SetLabel(str(self.stage3Led1Dist))
-				'''channel 2'''
-			if parameter == 'stage1_fill2':
-				self.stage1Fill2 = value.split(',')
-				self.stage1Fill2_Display.SetLabel(str(self.stage1Fill2))
-			if parameter == 'stage1_drain2':
-				self.stage1Drain2 = value.split(',')
-				self.stage1Drain2_Display.SetLabel(str(self.stage1Drain2))
-			if parameter == 'stage2_fill2':
-				self.stage2Fill2 = value.split(',')
-				self.stage2Fill2_Display.SetLabel(str(self.stage2Fill2))
-			if parameter == 'stage2_drain2':
-				self.stage2Drain2 = value.split(',')
-				self.stage2Drain2_Display.SetLabel(str(self.stage2Drain2))
-			if parameter == 'stage3_fill2':
-				self.stage3Fill2 = value.split(',')
-				self.stage3Fill2_Display.SetLabel(str(self.stage3Fill2))
-			if parameter == 'stage3_drain2':
-				self.stage3Drain2 = value.split(',')
-				self.stage3Drain2_Display.SetLabel(str(self.stage3Drain2))
-			if parameter == 'stage1_led2_on':
-				self.stage1Led2On = value.split(',')
-				self.stage1Led2On_Display.SetLabel(str(self.stage1Led2On))
-			if parameter == 'stage1_led2_off':
-				self.stage1Led2Off = value.split(',')
-				self.stage1Led2Off_Display.SetLabel(str(self.stage1Led2Off))
-			if parameter == 'stage1_led2_pwr':
-				self.stage1Led2Pwr = int(value)
-				self.stage1Led2Pwr_Display.SetLabel(str(self.stage1Led2Pwr))
-			if parameter == 'stage1_led2_dist':
-				self.stage1Led2Dist = int(value)
-				self.stage1Led2Dist_Display.SetLabel(str(self.stage1Led2Dist))
-			if parameter == 'stage2_led2_on':
-				self.stage2Led2On = value.split(',')
-				self.stage2Led2On_Display.SetLabel(str(self.stage2Led2On))
-			if parameter == 'stage2_led2_off':
-				self.stage2Led2Off = value.split(',')
-				self.stage2Led2Off_Display.SetLabel(str(self.stage2Led2Off))
-			if parameter == 'stage2_led2_pwr':
-				self.stage2Led2Pwr = int(value)
-				self.stage2Led2Pwr_Display.SetLabel(str(self.stage2Led2Pwr))
-			if parameter == 'stage2_led2_dist':
-				self.stage2Led2Dist = int(value)
-				self.stage2Led2Dist_Display.SetLabel(str(self.stage2Led2Dist))
-			if parameter == 'stage3_led2_on':
-				self.stage3Led2On = value.split(',')
-				self.stage3Led2On_Display.SetLabel(str(self.stage3Led2On))
-			if parameter == 'stage3_led2_off':
-				self.stage3Led2Off = value.split(',')
-				self.stage3Led2Off_Display.SetLabel(str(self.stage3Led2Off))
-			if parameter == 'stage3_led2_pwr':
-				self.stage3Led2Pwr = int(value)
-				self.stage3Led2Pwr_Display.SetLabel(str(self.stage3Led2Pwr))
-			if parameter == 'stage3_led2_dist':
-				self.stage3Led2Dist = int(value)
-				self.stage3Led2Dist_Display.SetLabel(str(self.stage3Led2Dist))
+			try:
+				thisLine = thisLine.split(' ') #split line into 2 items in an array
+			except:
+				pass
+			else:
+				parameter = thisLine[0] # allocate 1st item as parameter
+				value = thisLine[1] # allocate 2nd items as value
+				if parameter == 'recipe_name':
+					self.recipe_Display.SetLabel(str(value))
+				elif parameter == 'configuration':
+					self.config_Txtctrl.SetValue(value)
+				elif parameter == 'run_number':
+					self.run_Txtctrl.SetValue(value)
+				elif parameter == 'plant_type':
+					self.plant_Txtctrl.SetValue(value)
+				elif parameter == 'led_type':
+					self.led_Txtctrl.SetValue(value)
+				elif parameter == 'start_date':
+					self.startDate_Txtctrl.SetValue(value)
+					'''channel 1'''
+				elif parameter == 'stage1_fill1':
+					self.stage1Fill1 = value.split(',')
+					self.stage1Fill1_Display.SetLabel(str(self.stage1Fill1))
+				elif parameter == 'stage1_drain1':
+					self.stage1Drain1 = value.split(',')
+					self.stage1Drain1_Display.SetLabel(str(self.stage1Drain1))
+				elif parameter == 'stage2_fill1':
+					self.stage2Fill1 = value.split(',')
+					self.stage2Fill1_Display.SetLabel(str(self.stage2Fill1))
+				elif parameter == 'stage2_drain1':
+					self.stage2Drain1 = value.split(',')
+					self.stage2Drain1_Display.SetLabel(str(self.stage2Drain1))
+				elif parameter == 'stage3_fill1':
+					self.stage3Fill1 = value.split(',')
+					self.stage3Fill1_Display.SetLabel(str(self.stage3Fill1))
+				elif parameter == 'stage3_drain1':
+					self.stage3Drain1 = value.split(',')
+					self.stage3Drain1_Display.SetLabel(str(self.stage3Drain1))
+				elif parameter == 'stage1_led1_on':
+					self.stage1Led1On = value.split(',')
+					self.stage1Led1On_Display.SetLabel(str(self.stage1Led1On))
+				elif parameter == 'stage1_led1_off':
+					self.stage1Led1Off = value.split(',')
+					self.stage1Led1Off_Display.SetLabel(str(self.stage1Led1Off))
+				elif parameter == 'stage1_led1_pwr':
+					self.stage1Led1Pwr = int(value)
+					self.stage1Led1Pwr_Display.SetLabel(str(self.stage1Led1Pwr))
+				elif parameter == 'stage1_led1_dist':
+					self.stage1Led1Dist = int(value)
+					self.stage1Led1Dist_Display.SetLabel(str(self.stage1Led1Dist))
+				elif parameter == 'stage2_led1_on':
+					self.stage2Led1On = value.split(',')
+					self.stage2Led1On_Display.SetLabel(str(self.stage2Led1On))
+				elif parameter == 'stage2_led1_off':
+					self.stage2Led1Off = value.split(',')
+					self.stage2Led1Off_Display.SetLabel(str(self.stage2Led1Off))
+				elif parameter == 'stage2_led1_pwr':
+					self.stage2Led1Pwr = int(value)
+					self.stage2Led1Pwr_Display.SetLabel(str(self.stage2Led1Pwr))
+				elif parameter == 'stage2_led1_dist':
+					self.stage2Led1Dist = int(value)
+					self.stage2Led1Dist_Display.SetLabel(str(self.stage2Led1Dist))
+				elif parameter == 'stage3_led1_on':
+					self.stage3Led1On = value.split(',')
+					self.stage3Led1On_Display.SetLabel(str(self.stage3Led1On))
+				elif parameter == 'stage3_led1_off':
+					self.stage3Led1Off = value.split(',')
+					self.stage3Led1Off_Display.SetLabel(str(self.stage3Led1Off))
+				elif parameter == 'stage3_led1_pwr':
+					self.stage3Led1Pwr = int(value)
+					self.stage3Led1Pwr_Display.SetLabel(str(self.stage3Led1Pwr))
+				elif parameter == 'stage3_led1_dist':
+					self.stage3Led1Dist = int(value)
+					self.stage3Led1Dist_Display.SetLabel(str(self.stage3Led1Dist))
+					'''channel 2'''
+				elif parameter == 'stage1_fill2':
+					self.stage1Fill2 = value.split(',')
+					self.stage1Fill2_Display.SetLabel(str(self.stage1Fill2))
+				elif parameter == 'stage1_drain2':
+					self.stage1Drain2 = value.split(',')
+					self.stage1Drain2_Display.SetLabel(str(self.stage1Drain2))
+				elif parameter == 'stage2_fill2':
+					self.stage2Fill2 = value.split(',')
+					self.stage2Fill2_Display.SetLabel(str(self.stage2Fill2))
+				elif parameter == 'stage2_drain2':
+					self.stage2Drain2 = value.split(',')
+					self.stage2Drain2_Display.SetLabel(str(self.stage2Drain2))
+				elif parameter == 'stage3_fill2':
+					self.stage3Fill2 = value.split(',')
+					self.stage3Fill2_Display.SetLabel(str(self.stage3Fill2))
+				elif parameter == 'stage3_drain2':
+					self.stage3Drain2 = value.split(',')
+					self.stage3Drain2_Display.SetLabel(str(self.stage3Drain2))
+				elif parameter == 'stage1_led2_on':
+					self.stage1Led2On = value.split(',')
+					self.stage1Led2On_Display.SetLabel(str(self.stage1Led2On))
+				elif parameter == 'stage1_led2_off':
+					self.stage1Led2Off = value.split(',')
+					self.stage1Led2Off_Display.SetLabel(str(self.stage1Led2Off))
+				elif parameter == 'stage1_led2_pwr':
+					self.stage1Led2Pwr = int(value)
+					self.stage1Led2Pwr_Display.SetLabel(str(self.stage1Led2Pwr))
+				elif parameter == 'stage1_led2_dist':
+					self.stage1Led2Dist = int(value)
+					self.stage1Led2Dist_Display.SetLabel(str(self.stage1Led2Dist))
+				elif parameter == 'stage2_led2_on':
+					self.stage2Led2On = value.split(',')
+					self.stage2Led2On_Display.SetLabel(str(self.stage2Led2On))
+				elif parameter == 'stage2_led2_off':
+					self.stage2Led2Off = value.split(',')
+					self.stage2Led2Off_Display.SetLabel(str(self.stage2Led2Off))
+				elif parameter == 'stage2_led2_pwr':
+					self.stage2Led2Pwr = int(value)
+					self.stage2Led2Pwr_Display.SetLabel(str(self.stage2Led2Pwr))
+				elif parameter == 'stage2_led2_dist':
+					self.stage2Led2Dist = int(value)
+					self.stage2Led2Dist_Display.SetLabel(str(self.stage2Led2Dist))
+				elif parameter == 'stage3_led2_on':
+					self.stage3Led2On = value.split(',')
+					self.stage3Led2On_Display.SetLabel(str(self.stage3Led2On))
+				elif parameter == 'stage3_led2_off':
+					self.stage3Led2Off = value.split(',')
+					self.stage3Led2Off_Display.SetLabel(str(self.stage3Led2Off))
+				elif parameter == 'stage3_led2_pwr':
+					self.stage3Led2Pwr = int(value)
+					self.stage3Led2Pwr_Display.SetLabel(str(self.stage3Led2Pwr))
+				elif parameter == 'stage3_led2_dist':
+					self.stage3Led2Dist = int(value)
+					self.stage3Led2Dist_Display.SetLabel(str(self.stage3Led2Dist))
 
-			if parameter == 'stage1_ec':
-				self.stage1Ec = float(value)
-				self.stage1Ec_Display.SetLabel(str(self.stage1Ec))
-			if parameter == 'stage1_topup':
-				self.stage1Topup = value.split(',')
-				self.stage1Topup_Display.SetLabel(str(self.stage1Topup))
-			if parameter == 'stage1_dose':
-				self.stage1Dose = value.split(',')
-				self.stage1Dose_Display.SetLabel(str(self.stage1Dose))
-			if parameter == 'stage2_ec':
-				self.stage2Ec = float(value)
-				self.stage2Ec_Display.SetLabel(str(self.stage2Ec))
-			if parameter == 'stage2_topup':
-				self.stage2Topup = value.split(',')
-				self.stage2Topup_Display.SetLabel(str(self.stage2Topup))
-			if parameter == 'stage2_dose':
-				self.stage2Dose = value.split(',')
-				self.stage2Dose_Display.SetLabel(str(self.stage2Dose))
-			if parameter == 'stage3_ec':
-				self.stage3Ec = float(value)
-				self.stage3Ec_Display.SetLabel(str(self.stage3Ec))
-			if parameter == 'stage3_topup':
-				self.stage3Topup = value.split(',')
-				self.stage3Topup_Display.SetLabel(str(self.stage3Topup))
-			if parameter == 'stage3_dose':
-				self.stage3Dose = value.split(',')
-				self.stage3Dose_Display.SetLabel(str(self.stage3Dose))
-			if parameter == 'stage1_duration':
-				self.stage1Duration = int(value)
-				self.stage1Duration_Display.SetLabel(str(self.stage1Duration))
-			if parameter == 'stage2_duration':
-				self.stage2Duration = int(value)
-				self.stage2Duration_Display.SetLabel(str(self.stage2Duration))
-			if parameter == 'stage3_duration':
-				self.stage3Duration = int(value)
-				self.stage3Duration_Display.SetLabel(str(self.stage3Duration))
+				elif parameter == 'stage1_ec':
+					self.stage1Ec = float(value)
+					self.stage1Ec_Display.SetLabel(str(self.stage1Ec))
+				elif parameter == 'stage1_topup':
+					self.stage1Topup = value.split(',')
+					self.stage1Topup_Display.SetLabel(str(self.stage1Topup))
+				elif parameter == 'stage1_dose':
+					self.stage1Dose = value.split(',')
+					self.stage1Dose_Display.SetLabel(str(self.stage1Dose))
+				elif parameter == 'stage2_ec':
+					self.stage2Ec = float(value)
+					self.stage2Ec_Display.SetLabel(str(self.stage2Ec))
+				elif parameter == 'stage2_topup':
+					self.stage2Topup = value.split(',')
+					self.stage2Topup_Display.SetLabel(str(self.stage2Topup))
+				elif parameter == 'stage2_dose':
+					self.stage2Dose = value.split(',')
+					self.stage2Dose_Display.SetLabel(str(self.stage2Dose))
+				elif parameter == 'stage3_ec':
+					self.stage3Ec = float(value)
+					self.stage3Ec_Display.SetLabel(str(self.stage3Ec))
+				elif parameter == 'stage3_topup':
+					self.stage3Topup = value.split(',')
+					self.stage3Topup_Display.SetLabel(str(self.stage3Topup))
+				elif parameter == 'stage3_dose':
+					self.stage3Dose = value.split(',')
+					self.stage3Dose_Display.SetLabel(str(self.stage3Dose))
+				elif parameter == 'stage1_duration':
+					self.stage1Duration = int(value)
+					self.stage1Duration_Display.SetLabel(str(self.stage1Duration))
+				elif parameter == 'stage2_duration':
+					self.stage2Duration = int(value)
+					self.stage2Duration_Display.SetLabel(str(self.stage2Duration))
+				elif parameter == 'stage3_duration':
+					self.stage3Duration = int(value)
+					self.stage3Duration_Display.SetLabel(str(self.stage3Duration))
 
 	def LoadLog(self,event):
 		with wx.FileDialog(self, "Open Text file", wildcard="Text files (*.txt)|*.txt",\
