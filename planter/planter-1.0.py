@@ -9,6 +9,7 @@ import json
 host = '10.42.0.137'
 commandTopic = 'RACK1'
 sensorsTopic = 'RACK1S'
+statusTopic = 'RACKSTATUS'
 timeNow = ''
 recipePath = 'planter_recipe.txt'
 autoState = True
@@ -51,7 +52,13 @@ def Tick():
 	global timeNow
 	timeNow = time.strftime('%H:%M:%S')
 	print (timeNow)
-
+	DaysPassedDisplay()
+	CurrentStageDisplay()
+	jsonStatusMessage = {
+		'daysPassed':daysPassed,
+		'currentStage': currentStage
+	}
+	PublishJsonFormat(jsonStatusMessage,statusTopic)
 
 def LoadRecipe():
 	try:
@@ -203,7 +210,7 @@ def ReadRecipe(recipeContent):
 			'start_date':start_date
 			}
 	print(jsonStatus)
-	PublishJsonFormat(jsonStatus)
+	PublishJsonFormat(jsonStatus,commandTopic)
 
 def ChangeState():
 	global autoState
@@ -214,6 +221,7 @@ def ChangeState():
 		PublishStringFormat('STATE 0')
 
 def DaysPassedDisplay():
+	global start_date, daysPassed
 	today = datetime.date.today()
 	start_date_formatted = start_date.split('/')
 	day=int(start_date_formatted[0])
@@ -223,6 +231,7 @@ def DaysPassedDisplay():
 	daysPassed = (today-dateStart).days
 
 def CurrentStageDisplay():
+	global daysPassed, stage1Duration, stage2Duration, stage3Duration, currentStage
 	if daysPassed <= stage1Duration:
 		currentStage = 1
 	elif stage1Duration <= daysPassed <= (stage1Duration + stage2Duration):
@@ -233,9 +242,9 @@ def CurrentStageDisplay():
 	else:
 		currentStage = 3
 
-def PublishJsonFormat(jsonMessage):
+def PublishJsonFormat(jsonMessage,topic):
 	formattedJson = json.dumps(jsonMessage)
-	publish.single(commandTopic, formattedJson, hostname=host)
+	publish.single(topic, formattedJson, hostname=host)
 
 def PublishStringFormat(stringMessage):
 	publish.single(commandTopic, stringMessage, hostname=host)
