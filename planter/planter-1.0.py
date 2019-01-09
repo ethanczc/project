@@ -6,7 +6,7 @@ import time
 import datetime
 import json
 
-host = '10.42.0.137'
+host = 'localhost'
 commandTopic = 'RACK1'
 sensorsTopic = 'RACK1S'
 statusTopic = 'RACKSTATUS'
@@ -434,11 +434,15 @@ def DaysPassedFunction():
 	global start_date, daysPassed
 	today = datetime.date.today()
 	start_date_formatted = start_date.split('/')
-	day=int(start_date_formatted[0])
-	month=int(start_date_formatted[1])
-	year=int(start_date_formatted[2])
-	dateStart = datetime.date(year,month,day)
-	daysPassed = (today-dateStart).days
+	try:
+		day=int(start_date_formatted[0])
+		month=int(start_date_formatted[1])
+		year=int(start_date_formatted[2])
+	except:
+		pass
+	else:
+		dateStart = datetime.date(year,month,day)
+		daysPassed = (today-dateStart).days
 
 def CurrentStageFunction():
 	global daysPassed, stage1Duration, stage2Duration, stage3Duration, currentStage
