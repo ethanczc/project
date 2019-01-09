@@ -12,24 +12,32 @@ sensorsTopic = 'RACK1S'
 statusTopic = 'RACKSTATUS'
 timeNow = ''
 recipePath = 'planter_recipe.txt'
-autoState = True
+autoState = False
 recipe_name, configuration, run_number, plant_type, led_type, start_date = '', '', '', '', '', ''
+
+# irrigation
 stage1Fill1, stage1Drain1, stage2Fill1, stage2Drain1, stage3Fill1, stage3Drain1 = [],[],[],[],[],[]
 stage1Fill2, stage1Drain2, stage2Fill2, stage2Drain2, stage3Fill2, stage3Drain2 = [],[],[],[],[],[]
-stage1Led1On, stage1Led1Off = [], []
-stage1Led1Pwr, stage1Led1Dist = 0, 0
-stage2Led1On, stage2Led1Off = [], []
-stage2Led1Pwr, stage2Led1Dist = 0, 0
-stage3Led1On, stage3Led1Off = [], []
-stage3Led1Pwr, stage3Led1Dist = 0, 0
-stage1Led2On, stage1Led2Off = [], []
-stage1Led2Pwr, stage1Led2Dist = 0, 0
-stage2Led2On, stage2Led2Off = [], []
-stage2Led2Pwr, stage2Led2Dist = 0, 0
-stage3Led2On, stage3Led2Off = [], []
-stage3Led2Pwr, stage3Led2Dist = 0, 0
+
+# light 1
+stage1Led1On, stage1Led1Off, stage2Led1On, stage2Led1Off, stage3Led1On, stage3Led1Off = [],[],[],[],[],[]
+stage1Led1Pwr, stage1Led1Dist, stage2Led1Pwr, stage2Led1Dist, stage3Led1Pwr, stage3Led1Dist = 0,0,0,0,0,0
+
+# light 2
+stage1Led2On, stage1Led2Off, stage2Led2On, stage2Led2Off, stage3Led2On, stage3Led2Off = [],[],[],[],[],[]
+stage1Led2Pwr, stage1Led2Dist, stage2Led2Pwr, stage2Led2Dist, stage3Led2Pwr, stage3Led2Dist = 0,0,0,0,0,0
+
+# doser
+stage1Topup, stage2Topup, stage3Topup = [],[],[]
+stage1Dose, stage2Dose, stage3Dose = [],[],[]
+stage1Ec, stage2Ec, stage3Ec = 0.0, 0.0, 0.0
+ec = 0.0
+tankSize = 6000
+
+# stage control
 stage1Duration, stage2Duration, stage3Duration = 0, 0, 0
 currentStage, daysPassed = 0, 0
+
  
 def on_connect(client, userdata, flags, rc):
     client.subscribe(sensorsTopic)
@@ -37,28 +45,235 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     message = str(msg.payload)
     message = message[2:-1]
-    DecodeMessage(message)
+    FilterIncomingMessage(message)
 
-def DecodeMessage(rawMessage):
+def FilterIncomingMessage(rawMessage):
+	global ec
 	message = rawMessage.split(' ')
-	if message[0] == 'CLK':
+	key = message[0]
+	value = float(message[1])
+	if key == 'CLK':
 		Tick()
-	if message[0] == 'LOAD':
+	if key == 'LOAD':
 		LoadRecipe()
-	if message[0] == 'STATE':
+	if key == 'STATE':
 		ChangeState()
+	if key == 'EC':
+		ec = value
+	if key == 'AEC':
+		ec = value
+		DoserEcDose(ec)
 
 def Tick():
-	global timeNow
+	global timeNow, daysPassed,currentStage
 	timeNow = time.strftime('%H:%M:%S')
+	StatusCheck()
+	IrrigationCheck1()
+	IrrigationCheck2()
+	LightCheck1()
+	LightCheck2()
+	DoserCheck()
 	print (timeNow)
-	DaysPassedDisplay()
-	CurrentStageDisplay()
+
+def StatusCheck():
+	DaysPassedFunction()
+	CurrentStageFunction()
 	jsonStatusMessage = {
+		'name': 'status',
 		'daysPassed':daysPassed,
 		'currentStage': currentStage
 	}
 	PublishJsonFormat(jsonStatusMessage,statusTopic)
+
+def ParametersCheck():
+	global recipe_name, configuration, run_number, plant_type, led_type, start_date
+	jsonParameters = {
+		'name': 'parameters',
+		'recipe_name':recipe_name,
+		'configuration':configuration,
+		'run_number':run_number,
+		'plant_type': plant_type,
+		'led_type':led_type,
+		'start_date':start_date
+		}
+	print(jsonParameters)
+	PublishJsonFormat(jsonParameters,statusTopic)
+
+def IrrigationCheck1():
+	global autoState, currentStage, timeNow
+	if autoState:
+		if currentStage == 1:
+			for thisTime in stage1Fill1:
+				if thisTime == timeNow:
+					PumpFunction(1,1)
+			for thisTime in stage1Drain1:
+				if thisTime == timeNow:
+					DrainFunction(1,1)
+		elif currentStage == 2:
+			for thisTime in stage2Fill1:
+				if thisTime == timeNow:
+					PumpFunction(1,1)
+			for thisTime in stage2Drain1:
+				if thisTime == timeNow:
+					DrainFunction(1,1)
+		elif currentStage == 3:
+			for thisTime in stage3Fill1:
+				if thisTime == timeNow:
+					PumpFunction(1,1)
+			for thisTime in stage3Drain1:
+				if thisTime == timeNow:
+					DrainFunction(1,1)
+
+def IrrigationCheck2():
+	global autoState, currentStage, timeNow
+	if autoState:
+		if currentStage == 1:
+			for thisTime in stage1Fill2:
+				if thisTime == timeNow:
+					PumpFunction(2,1)
+			for thisTime in stage1Drain2:
+				if thisTime == timeNow:
+					DrainFunction(2,1)
+		elif currentStage == 2:
+			for thisTime in stage2Fill2:
+				if thisTime == timeNow:
+					PumpFunction(2,1)
+			for thisTime in stage2Drain2:
+				if thisTime == timeNow:
+					DrainFunction(2,1)
+		elif currentStage == 3:
+			for thisTime in stage3Fill2:
+				if thisTime == timeNow:
+					PumpFunction(2,1)
+			for thisTime in stage3Drain2:
+				if thisTime == timeNow:
+					DrainFunction(2,1)
+
+def LightCheck1():
+	global autoState, currentStage, timeNow
+	global stage1Led1Pwr, stage2Led1Pwr, stage3Led1Pwr
+	if autoState:
+		if currentStage == 1:
+			for thisTime in stage1Led1On:
+				if thisTime == timeNow:
+					LightPwrFunction(1,stage1Led1Pwr)
+					time.sleep(2)
+					LightDistanceFunction(1,stage1Led1Dist)
+			for thisTime in stage1Led1Off:
+				if thisTime == timeNow:
+					LightPwrFunction(1,0)
+		elif currentStage == 2:
+			for thisTime in stage2Led1On:
+				if thisTime == timeNow:
+					LightPwrFunction(1,stage2Led1Pwr)
+					time.sleep(2)
+					LightDistanceFunction(1,stage2Led1Dist)
+			for thisTime in stage2Led1Off:
+				if thisTime == timeNow:
+					LightPwrFunction(1,0)
+		elif currentStage == 3:
+			for thisTime in stage3Led1On:
+				if thisTime == timeNow:
+					LightPwrFunction(1,stage3Led1Pwr)
+					time.sleep(2)
+					LightDistanceFunction(1,stage3Led1Dist)
+			for thisTime in stage3Led1Off:
+				if thisTime == timeNow:
+					LightPwrFunction(1,0)
+
+def LightCheck2():
+	global autoState, currentStage, timeNow
+	global stage1Led2Pwr, stage2Led2Pwr, stage3Led2Pwr
+	if autoState:
+		if currentStage == 1:
+			for thisTime in stage1Led2On:
+				if thisTime == timeNow:
+					LightPwrFunction(2,stage1Led2Pwr)
+					time.sleep(2)
+					LightDistanceFunction(2,stage1Led2Dist)
+			for thisTime in stage1Led2Off:
+				if thisTime == timeNow:
+					LightPwrFunction(2,0)
+		elif currentStage == 2:
+			for thisTime in stage2Led2On:
+				if thisTime == timeNow:
+					LightPwrFunction(2,stage2Led2Pwr)
+					time.sleep(2)
+					LightDistanceFunction(2,stage2Led2Dist)
+			for thisTime in stage2Led2Off:
+				if thisTime == timeNow:
+					LightPwrFunction(2,0)
+		elif currentStage == 3:
+			for thisTime in stage3Led2On:
+				if thisTime == timeNow:
+					LightPwrFunction(2,stage3Led2Pwr)
+					time.sleep(2)
+					LightDistanceFunction(2,stage3Led2Dist)
+			for thisTime in stage3Led1Off:
+				if thisTime == timeNow:
+					LightPwrFunction(2,0)
+
+def DoserCheck():
+	global autoState, currentStage, timeNow
+	if autoState:
+		if currentStage == 1:
+			for thisTime in stage1Topup:
+				if thisTime == timeNow:
+					DoserTopUpFunction(1)
+			for thisTime in stage1Dose:
+				if thisTime == timeNow:
+					DoserEcDoseFunction()
+		if currentStage == 2:
+			for thisTime in stage2Topup:
+				if thisTime == timeNow:
+					DoserTopUpFunction(1)
+			for thisTime in stage2Dose:
+				if thisTime == timeNow:
+					DoserEcDoseFunction()
+		if currentStage == 3:
+			for thisTime in stage3Topup:
+				if thisTime == timeNow:
+					DoserTopUpFunction(1)
+			for thisTime in stage3Dose:
+				if thisTime == timeNow:
+					DoserEcDoseFunction()
+
+def PumpFunction(channel,state):
+	PublishStringFormat('PU{} {}'.format(channel,state))
+
+def DrainFunction(channel,state):
+	PublishStringFormat('DR{} {}'.format(channel,state))
+
+def LightPwrFunction(channel,power):
+	PublishStringFormat('LP{} {}'.format(channel,power))
+
+def LightDistanceFunction(channel,distance):
+	PublishStringFormat('LD{} {}'.format(channel,distance))
+
+def DoserTopUpFunction():
+	PublishStringFormat('PU {}'.format(state))
+
+def DoserEcDoseFunction():
+	PublishStringFormat('AEC 1')
+
+def DoserEcDose(ecValue):
+	global stage1Ec, stage2Ec, stage3Ec, tankSize
+	nutrientVolume = 0
+	EcFactor = 100.0
+	if ecValue == 0 or ecValue == 100:
+		nutrientVolume = 0
+	elif currentStage == 1:
+		nutrientVolume = (stage1Ec - ecValue) * float(tankSize / EcFactor)
+	elif currentStage == 2:
+		nutrientVolume = (stage2Ec - ecValue) * float(tankSize / EcFactor)
+	elif currentStage == 3:
+		nutrientVolume = (stage3Ec - ecValue) * float(tankSize / EcFactor)
+	nutrientVolume = int(round(nutrientVolume))
+	if nutrientVolume <= 0:
+		pass
+	else:
+		print(nutrientVolume)
+		PublishStringFormat('NP {}'.format(nutrientVolume/2))
 
 def LoadRecipe():
 	try:
@@ -79,6 +294,9 @@ def ReadRecipe(recipeContent):
 	global stage1Led2On, stage1Led2Off, stage1Led2Pwr, stage1Led2Dist
 	global stage2Led2On, stage2Led2Off, stage2Led2Pwr, stage2Led2Dist
 	global stage3Led2On, stage3Led2Off, stage3Led2Pwr, stage3Led2Dist
+	global stage1Topup, stage2Topup, stage3Topup
+	global stage1Dose, stage2Dose, stage3Dose
+	global stage1Ec,stage2Ec,stage3Ec
 	global stage1Duration, stage2Duration, stage3Duration
 
 	for line in range (0,len(recipeContent)):
@@ -201,16 +419,7 @@ def ReadRecipe(recipeContent):
 				stage2Duration = int(value)
 			elif parameter == 'stage3_duration':
 				stage3Duration = int(value)
-	jsonStatus = {
-			'recipe_name':recipe_name,
-			'configuration':configuration,
-			'run_number':run_number,
-			'plant_type': plant_type,
-			'led_type':led_type,
-			'start_date':start_date
-			}
-	print(jsonStatus)
-	PublishJsonFormat(jsonStatus,commandTopic)
+	ParametersCheck()
 
 def ChangeState():
 	global autoState
@@ -219,8 +428,9 @@ def ChangeState():
 		PublishStringFormat('STATE 1')
 	else:
 		PublishStringFormat('STATE 0')
+	print ('STATE: {}'.format(autoState))
 
-def DaysPassedDisplay():
+def DaysPassedFunction():
 	global start_date, daysPassed
 	today = datetime.date.today()
 	start_date_formatted = start_date.split('/')
@@ -230,7 +440,7 @@ def DaysPassedDisplay():
 	dateStart = datetime.date(year,month,day)
 	daysPassed = (today-dateStart).days
 
-def CurrentStageDisplay():
+def CurrentStageFunction():
 	global daysPassed, stage1Duration, stage2Duration, stage3Duration, currentStage
 	if daysPassed <= stage1Duration:
 		currentStage = 1
@@ -249,8 +459,22 @@ def PublishJsonFormat(jsonMessage,topic):
 def PublishStringFormat(stringMessage):
 	publish.single(commandTopic, stringMessage, hostname=host)
 
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
-client.connect(host, 1883, 60)
-client.loop_forever()
+def InitialCheck():
+	jsonStatusMessage = {
+		'name': 'status',
+		'daysPassed':'',
+		'currentStage': ''
+	}
+	PublishJsonFormat(jsonStatusMessage,statusTopic)
+
+def main():
+	client = mqtt.Client()
+	client.on_connect = on_connect
+	client.on_message = on_message
+	client.connect(host, 1883, 60)
+	ParametersCheck()
+	InitialCheck()
+	client.loop_forever()
+
+if __name__ == '__main__':
+	main()
