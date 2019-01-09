@@ -371,8 +371,8 @@
         "topic": "RACK1",
         "qos": "2",
         "broker": "a113a6e8.11ab8",
-        "x": 170,
-        "y": 640,
+        "x": 150,
+        "y": 660,
         "wires": [
             [
                 "e13b924.efd857"
@@ -387,11 +387,11 @@
         "func": "var output = {payload:msg.payload};\n\nvar words = msg.payload.split(\" \");\nif (words[0]==\"PU1\" || words[0]==\"DR1\" || \nwords[0]==\"PU2\" || words[0]==\"DR2\" ||\nwords[0]==\"PU3\" || words[0]==\"DR3\" ||\nwords[0]==\"PU4\" || words[0]==\"DR4\") {\n    return [output,[],[]];\n}\nif (words[0]==\"LP1\" || words[0]==\"LD1\" ||\nwords[0]==\"LP2\" || words[0]==\"LD2\" ||\nwords[0]==\"LP3\" || words[0]==\"LD3\") {\n    return [[],output,[]];\n}\nif (words[0]==\"AEC\" || words[0]==\"EC\" ||\nwords[0]==\"NP\" || words[0]==\"PU\" ||\nwords[0]==\"NPA\" || words[0]==\"NPB\") {\n    return [[],[],output];\n}",
         "outputs": 3,
         "noerr": 0,
-        "x": 370,
-        "y": 680,
+        "x": 450,
+        "y": 740,
         "wires": [
             [
-                "f81c35a6.7e9e2"
+                "f755e2f5.43c4f8"
             ],
             [
                 "76aca8dd.1c6be8"
@@ -416,27 +416,13 @@
         "mode": "text",
         "delay": "0",
         "topic": "",
-        "x": 150,
+        "x": 130,
         "y": 720,
         "wires": [
             [
                 "e13b924.efd857"
             ]
         ]
-    },
-    {
-        "id": "f81c35a6.7e9e2",
-        "type": "debug",
-        "z": "b6f8c514.5c244",
-        "name": "USB0",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 590,
-        "y": 640,
-        "wires": []
     },
     {
         "id": "76aca8dd.1c6be8",
@@ -448,8 +434,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 590,
-        "y": 680,
+        "x": 750,
+        "y": 740,
         "wires": []
     },
     {
@@ -462,8 +448,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 590,
-        "y": 720,
+        "x": 750,
+        "y": 780,
         "wires": []
     },
     {
@@ -537,6 +523,462 @@
         ]
     },
     {
+        "id": "f755e2f5.43c4f8",
+        "type": "debug",
+        "z": "b6f8c514.5c244",
+        "name": "USB0",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 750,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "50f36f77.d0553",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 PUMP ON",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "PUMP ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "PU1 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 200,
+        "y": 780,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "bda99669.37fb68",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 PUMP OFF",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "PUMP OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "PU1 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 200,
+        "y": 820,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "8eb92d69.dca43",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 DRAIN ON",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "DRAIN ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "DR1 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 200,
+        "y": 860,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "267f2356.d50c0c",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 DRAIN OFF",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "DRAIN OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "DR1 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 190,
+        "y": 900,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "68b99e9a.926b48",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "FILL TANK",
+        "group": "e00c96df.03e3d8",
+        "order": 3,
+        "width": "6",
+        "height": "2",
+        "passthru": false,
+        "label": "FILL TANK",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "PU 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 210,
+        "y": 960,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "a588bb38.95a4a",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CHECK EC",
+        "group": "e00c96df.03e3d8",
+        "order": 3,
+        "width": "6",
+        "height": "2",
+        "passthru": false,
+        "label": "CHECK EC",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "EC 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 210,
+        "y": 1000,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "a9b750c7.7d07f",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "ADD NUTRIENTS",
+        "group": "e00c96df.03e3d8",
+        "order": 3,
+        "width": "6",
+        "height": "2",
+        "passthru": false,
+        "label": "ADD NUTRIENTS",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "AEC 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 190,
+        "y": 1040,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "1f3597f4.efee08",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 LIGHT ON",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "LIGHT ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LP1 100",
+        "payloadType": "str",
+        "topic": "",
+        "x": 460,
+        "y": 840,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "2133cc04.7e783c",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 LIGHT OFF",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "LIGHT OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LP1 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 450,
+        "y": 880,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "495895d2.27f5bc",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH1 LIGHT HOME",
+        "group": "8feed448.033828",
+        "order": 3,
+        "width": "6",
+        "height": "3",
+        "passthru": false,
+        "label": "LIGHT HOME",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LD1 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 450,
+        "y": 920,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "2a055cf2.24a7b4",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 PUMP ON",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "PUMP ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "PU2 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 200,
+        "y": 1100,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "d21743b8.2a3f88",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 PUMP OFF",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "PUMP OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "PU2 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 200,
+        "y": 1140,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "30ed054b.f059fa",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 DRAIN ON",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "DRAIN ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "DR2 1",
+        "payloadType": "str",
+        "topic": "",
+        "x": 200,
+        "y": 1180,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "85a06bf5.df6a9",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 DRAIN OFF",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "DRAIN OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "DR2 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 190,
+        "y": 1220,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "dafdc64e.98f89",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 LIGHT ON",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "LIGHT ON",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LP2 100",
+        "payloadType": "str",
+        "topic": "",
+        "x": 460,
+        "y": 980,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "ed9ab00f.6e05d",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 LIGHT OFF",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "3",
+        "height": "2",
+        "passthru": false,
+        "label": "LIGHT OFF",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LP2 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 450,
+        "y": 1020,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
+        "id": "c76b99e6.58a42",
+        "type": "ui_button",
+        "z": "b6f8c514.5c244",
+        "name": "CH2 LIGHT HOME",
+        "group": "e648d74.e787f28",
+        "order": 3,
+        "width": "6",
+        "height": "3",
+        "passthru": false,
+        "label": "LIGHT HOME",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LD2 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 450,
+        "y": 1060,
+        "wires": [
+            [
+                "e13b924.efd857"
+            ]
+        ]
+    },
+    {
         "id": "a113a6e8.11ab8",
         "type": "mqtt-broker",
         "z": "",
@@ -573,9 +1015,31 @@
         "id": "e00c96df.03e3d8",
         "type": "ui_group",
         "z": "",
-        "name": "CONTROL",
+        "name": "CONTROL MAIN",
         "tab": "e8600836.0163f8",
         "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "8feed448.033828",
+        "type": "ui_group",
+        "z": "",
+        "name": "CONTROL CHANNEL 1",
+        "tab": "e8600836.0163f8",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "e648d74.e787f28",
+        "type": "ui_group",
+        "z": "",
+        "name": "CONTROL CHANNEL 2",
+        "tab": "e8600836.0163f8",
+        "order": 4,
         "disp": true,
         "width": "6",
         "collapse": false
