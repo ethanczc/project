@@ -46,6 +46,7 @@ def on_message(client, userdata, msg):
 	elif message["topic"] == "recipeMain":
 		recipeMain = message
 		print (recipeMain)
+		DaysPassedStageCheck()
 	elif message["topic"] == "clock":
 		Tick()
 	elif message["topic"] == "AEC":
@@ -56,7 +57,6 @@ def on_message(client, userdata, msg):
 def Tick():
 	global timeNow, autoMode
 	timeNow = time.strftime("%H:%M:%S")
-	DaysPassedStageCheck()
 	CheckAutoMode()
 	IrrigationCheck1()
 	IrrigationCheck2()
