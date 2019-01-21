@@ -32,13 +32,13 @@
         "z": "8f21f826.8fb24",
         "name": "",
         "topic": "",
-        "payload": "AEC 1.5",
+        "payload": "EC 1.0",
         "payloadType": "str",
         "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 120,
+        "x": 110,
         "y": 80,
         "wires": [
             [
@@ -58,7 +58,8 @@
         "y": 80,
         "wires": [
             [
-                "fa4495bc.802e8"
+                "fa4495bc.802e8",
+                "46d94d17.7360bc"
             ]
         ]
     },
@@ -116,7 +117,7 @@
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
         "order": 1,
-        "width": "3",
+        "width": "4",
         "height": "1",
         "passthru": true,
         "mode": "text",
@@ -138,8 +139,8 @@
         "label": "Auto",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 4,
-        "width": "3",
+        "order": 12,
+        "width": "4",
         "height": "1",
         "passthru": true,
         "decouple": "false",
@@ -169,7 +170,7 @@
         "label": "Stage 1 duration",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 6,
+        "order": 5,
         "width": "8",
         "height": "1",
         "passthru": true,
@@ -194,7 +195,7 @@
         "label": "Stage 2 Duration",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 8,
+        "order": 7,
         "width": "8",
         "height": "1",
         "passthru": true,
@@ -219,7 +220,7 @@
         "label": "Stage 3 Duration",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 10,
+        "order": 9,
         "width": "8",
         "height": "1",
         "passthru": true,
@@ -244,7 +245,7 @@
         "label": "stage 1 ec",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 7,
+        "order": 6,
         "width": "8",
         "height": "1",
         "passthru": true,
@@ -265,16 +266,22 @@
         "id": "c2f0743d.4b5de",
         "type": "function",
         "z": "8f21f826.8fb24",
-        "name": "Command Parser",
+        "name": "Command Parser to Output",
         "func": "var output = {payload:msg.payload};\n\nvar words = msg.payload.split(\" \");\n\nif (words[0]==\"PU1\" || words[0]==\"DR1\" || \nwords[0]==\"PU2\" || words[0]==\"DR2\" ||\nwords[0]==\"PU3\" || words[0]==\"DR3\" ||\nwords[0]==\"PU4\" || words[0]==\"DR4\") {\n    return [output,[],[]];\n}\nif (words[0]==\"LP1\" || words[0]==\"LD1\" ||\nwords[0]==\"LP2\" || words[0]==\"LD2\" ||\nwords[0]==\"LP3\" || words[0]==\"LD3\") {\n    return [[],output,[]];\n}\nif (words[0]==\"AEC\" || words[0]==\"EC\" ||\nwords[0]==\"NP\" || words[0]==\"PU\" ||\nwords[0]==\"NPA\" || words[0]==\"NPB\") {\n    return [[],[],output];\n}\n",
         "outputs": 3,
         "noerr": 0,
-        "x": 330,
-        "y": 180,
+        "x": 380,
+        "y": 200,
         "wires": [
-            [],
-            [],
-            []
+            [
+                "d5cefff2.e58b48"
+            ],
+            [
+                "b5470159.a9c34"
+            ],
+            [
+                "3dd22f7c.c6e2a"
+            ]
         ]
     },
     {
@@ -283,14 +290,14 @@
         "z": "8f21f826.8fb24",
         "group": "7699a3e1.eb10d4",
         "order": 2,
-        "width": "3",
+        "width": "4",
         "height": "1",
         "name": "",
         "label": "Days Passed",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 580,
-        "y": 220,
+        "y": 260,
         "wires": []
     },
     {
@@ -298,18 +305,19 @@
         "type": "function",
         "z": "8f21f826.8fb24",
         "name": "days pass stage check",
-        "func": "words = (msg.payload).split(\" \")\n\nif (words[0] == \"DAYS\") {\n    output = {payload : words[1]}\n    return [output,[]];\n}\n    \nelse if (words[0] == \"STAGE\") {\n    output = {payload: words[1]}\n    return [[],output];\n}\n",
-        "outputs": 2,
+        "func": "words = (msg.payload).split(\" \")\n\nif (words[0] == \"DAYS\") {\n    output = {payload : words[1]}\n    return [output,[],[]];\n}\nelse if (words[0] == \"STAGE\") {\n    output = {payload: words[1]}\n    return [[],output,[]];\n}\nelse if (words[0] == \"EC\") {\n    output = {payload:words[1]}\n    return [[],[],output]\n}\n",
+        "outputs": 3,
         "noerr": 0,
         "x": 350,
-        "y": 240,
+        "y": 280,
         "wires": [
             [
                 "a82fc766.e176d8"
             ],
             [
                 "21957563.b9637a"
-            ]
+            ],
+            []
         ]
     },
     {
@@ -318,14 +326,14 @@
         "z": "8f21f826.8fb24",
         "group": "7699a3e1.eb10d4",
         "order": 3,
-        "width": "3",
+        "width": "4",
         "height": "1",
         "name": "",
         "label": "Current Stage",
         "format": "{{msg.payload}}",
         "layout": "row-spread",
         "x": 580,
-        "y": 260,
+        "y": 300,
         "wires": []
     },
     {
@@ -336,14 +344,14 @@
         "label": "CMD Input",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 5,
-        "width": "3",
+        "order": 11,
+        "width": "4",
         "height": "1",
         "passthru": true,
         "mode": "text",
         "delay": "0",
         "topic": "",
-        "x": 130,
+        "x": 150,
         "y": 160,
         "wires": [
             [
@@ -359,7 +367,7 @@
         "topic": "planter_command",
         "qos": "2",
         "broker": "a113a6e8.11ab8",
-        "x": 110,
+        "x": 130,
         "y": 220,
         "wires": [
             [
@@ -377,7 +385,7 @@
         "label": "stage 2 ec",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 9,
+        "order": 8,
         "width": "8",
         "height": "1",
         "passthru": true,
@@ -402,7 +410,7 @@
         "label": "stage 3 ec",
         "tooltip": "",
         "group": "7699a3e1.eb10d4",
-        "order": 11,
+        "order": 10,
         "width": "8",
         "height": "1",
         "passthru": true,
@@ -473,9 +481,297 @@
         "console": false,
         "tostatus": false,
         "complete": "false",
-        "x": 310,
-        "y": 120,
+        "x": 330,
+        "y": 140,
         "wires": []
+    },
+    {
+        "id": "46d94d17.7360bc",
+        "type": "ui_text",
+        "z": "8f21f826.8fb24",
+        "group": "7699a3e1.eb10d4",
+        "order": 13,
+        "width": "4",
+        "height": "1",
+        "name": "",
+        "label": "Current Ec",
+        "format": "{{msg.payload.ec}}",
+        "layout": "row-spread",
+        "x": 510,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "34a09cd5.13507c",
+        "type": "serial in",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "a62176f8.8fb498",
+        "x": 110,
+        "y": 120,
+        "wires": [
+            [
+                "baface86.795288"
+            ]
+        ]
+    },
+    {
+        "id": "d5cefff2.e58b48",
+        "type": "serial out",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "5b659562.0df30c",
+        "x": 610,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b5470159.a9c34",
+        "type": "serial out",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "dc46d5ea.9669",
+        "x": 610,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "3dd22f7c.c6e2a",
+        "type": "serial out",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "a62176f8.8fb498",
+        "x": 610,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "9ea1f2f.feb799",
+        "type": "function",
+        "z": "8f21f826.8fb24",
+        "name": "Command Parser",
+        "func": "var output = {payload:msg.payload};\n\nvar words = msg.payload.split(\" \");\n\nif (words[0]==\"PU1\" || words[0]==\"DR1\" || \nwords[0]==\"PU2\" || words[0]==\"DR2\" ||\nwords[0]==\"PU3\" || words[0]==\"DR3\" ||\nwords[0]==\"PU4\" || words[0]==\"DR4\") {\n    return [output,[],[]];\n}\nif (words[0]==\"LP1\" || words[0]==\"LD1\" ||\nwords[0]==\"LP2\" || words[0]==\"LD2\" ||\nwords[0]==\"LP3\" || words[0]==\"LD3\") {\n    return [[],output,[]];\n}\nif (words[0]==\"AEC\" || words[0]==\"EC\" ||\nwords[0]==\"NP\" || words[0]==\"PU\" ||\nwords[0]==\"NPA\" || words[0]==\"NPB\") {\n    return [[],[],output];\n}\n",
+        "outputs": 3,
+        "noerr": 0,
+        "x": 370,
+        "y": 700,
+        "wires": [
+            [
+                "3ef8b3fb.cf1444"
+            ],
+            [
+                "9e33b2ad.e514f8"
+            ],
+            [
+                "5c0e8920.bafe18"
+            ]
+        ]
+    },
+    {
+        "id": "3ef8b3fb.cf1444",
+        "type": "serial out",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "5b659562.0df30c",
+        "x": 570,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "9e33b2ad.e514f8",
+        "type": "serial out",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "dc46d5ea.9669",
+        "x": 570,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "5c0e8920.bafe18",
+        "type": "serial out",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "serial": "a62176f8.8fb498",
+        "x": 570,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "37c183bd.e877cc",
+        "type": "ui_switch",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "label": "1 Pump",
+        "tooltip": "",
+        "group": "9c3a2210.c88648",
+        "order": 1,
+        "width": "5",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "PU1 1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "PU1 0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 140,
+        "y": 600,
+        "wires": [
+            [
+                "9ea1f2f.feb799"
+            ]
+        ]
+    },
+    {
+        "id": "d0b5e199.9fd218",
+        "type": "ui_switch",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "label": "1 Light",
+        "tooltip": "",
+        "group": "9c3a2210.c88648",
+        "order": 2,
+        "width": "5",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "LP1 1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "LP1 0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 150,
+        "y": 640,
+        "wires": [
+            [
+                "9ea1f2f.feb799"
+            ]
+        ]
+    },
+    {
+        "id": "d1901104.16a9b8",
+        "type": "ui_button",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "group": "9c3a2210.c88648",
+        "order": 3,
+        "width": "5",
+        "height": "1",
+        "passthru": false,
+        "label": "1 Light Home",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LD1 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 120,
+        "y": 680,
+        "wires": [
+            [
+                "9ea1f2f.feb799"
+            ]
+        ]
+    },
+    {
+        "id": "a8d58a7e.5aa348",
+        "type": "ui_switch",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "label": "2 Pump",
+        "tooltip": "",
+        "group": "9c3a2210.c88648",
+        "order": 5,
+        "width": "5",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "PU2 1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "PU2 0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 140,
+        "y": 720,
+        "wires": [
+            [
+                "9ea1f2f.feb799"
+            ]
+        ]
+    },
+    {
+        "id": "97ce9284.62c9d",
+        "type": "ui_switch",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "label": "2 Light",
+        "tooltip": "",
+        "group": "9c3a2210.c88648",
+        "order": 6,
+        "width": "5",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "LP2 1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "LP2 0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 150,
+        "y": 760,
+        "wires": [
+            [
+                "9ea1f2f.feb799"
+            ]
+        ]
+    },
+    {
+        "id": "b15bb646.5393e",
+        "type": "ui_button",
+        "z": "8f21f826.8fb24",
+        "name": "",
+        "group": "9c3a2210.c88648",
+        "order": 7,
+        "width": "5",
+        "height": "1",
+        "passthru": false,
+        "label": "2 Light Home",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "LD2 0",
+        "payloadType": "str",
+        "topic": "",
+        "x": 120,
+        "y": 800,
+        "wires": [
+            [
+                "9ea1f2f.feb799"
+            ]
+        ]
     },
     {
         "id": "a113a6e8.11ab8",
@@ -506,6 +802,62 @@
         "name": "Setup",
         "tab": "cabd45ec.61c37",
         "order": 1,
+        "disp": true,
+        "width": "16",
+        "collapse": false
+    },
+    {
+        "id": "a62176f8.8fb498",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "/dev/ttyUSB2",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": false,
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "5b659562.0df30c",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "/dev/ttyUSB0",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": false,
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "dc46d5ea.9669",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "/dev/ttyUSB1",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": false,
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "9c3a2210.c88648",
+        "type": "ui_group",
+        "z": "",
+        "name": "Controls",
+        "tab": "cabd45ec.61c37",
+        "order": 2,
         "disp": true,
         "width": "16",
         "collapse": false
