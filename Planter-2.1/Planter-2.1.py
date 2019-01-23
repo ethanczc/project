@@ -39,7 +39,7 @@ def on_message(client, userdata, msg):
 				recipe2a = message
 			elif message["stage"] == 2:
 				recipe2b = message
-			elif message["stage"] == 2:
+			elif message["stage"] == 3:
 				recipe2c = message
 		indentedRecipe = json.dumps(message, indent = 2, sort_keys = True)
 		print(indentedRecipe) # print a nicely indented json format
