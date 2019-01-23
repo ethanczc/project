@@ -23,7 +23,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(recipeTopic)
  
 def on_message(client, userdata, msg):
-	global recipeMain, recipe1a, recip1b, recipe1c, recipe2a, recipe2b, recipe2c
+	global recipeMain, recipe1a, recip1eb, recipe1c, recipe2a, recipe2b, recipe2c
 	decodedMessage = str(msg.payload.decode("utf-8","ignore"))
 	message = json.loads(decodedMessage)
 	if message["topic"] == "recipe":
@@ -32,7 +32,7 @@ def on_message(client, userdata, msg):
 				recipe1a = message
 			elif message["stage"] == 2:
 				recipe1b = message
-			elif message["stage"] == 2:
+			elif message["stage"] == 3:
 				recipe1c = message
 		elif message["channel"] == 2:
 			if message["stage"] == 1:
