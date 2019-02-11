@@ -1,15 +1,15 @@
 [
     {
-        "id": "8f21f826.8fb24",
+        "id": "46caaa5d.d13e24",
         "type": "tab",
         "label": "Planter-2.1 Main",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "cad9f092.c95788",
+        "id": "d5123153.cc133",
         "type": "inject",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "CLOCK",
         "topic": "clock",
         "payload": "1s",
@@ -22,14 +22,14 @@
         "y": 40,
         "wires": [
             [
-                "f39c283b.56b3f8"
+                "77eb6991.d3bed8"
             ]
         ]
     },
     {
-        "id": "eca62655.f29c7",
+        "id": "7dd2fbf7.082784",
         "type": "inject",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "topic": "",
         "payload": "EC 1.0",
@@ -42,31 +42,31 @@
         "y": 80,
         "wires": [
             [
-                "baface86.795288"
+                "c29c18d4.f66ff8"
             ]
         ]
     },
     {
-        "id": "baface86.795288",
+        "id": "c29c18d4.f66ff8",
         "type": "function",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "AEC parser",
-        "func": "data = (msg.payload).split(\" \");\nmessage = {};\nmessage.payload = {\n    \"topic\": \"AEC\",\n    \"ec\": data[1]\n}\nreturn message;",
+        "func": "data = (msg.payload).split(\" \");\nmessage = {};\nif (data[0] == \"EC\") {\n    message.payload = {\n        \"topic\": \"EC\",\n        \"ec\": data[1]\n    }\n}\nelse if (data[0] == \"AEC\"){\n    message.payload = {\n        \"topic\": \"AEC\",\n        \"ec\": data[1]\n    }\n}\n\nreturn message;",
         "outputs": 1,
         "noerr": 0,
         "x": 290,
         "y": 80,
         "wires": [
             [
-                "fa4495bc.802e8",
-                "46d94d17.7360bc"
+                "3b08ed1d.c48502",
+                "411aaa66.f71d94"
             ]
         ]
     },
     {
-        "id": "f39c283b.56b3f8",
+        "id": "77eb6991.d3bed8",
         "type": "function",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "clock",
         "func": "message = {};\nmessage.payload = {\n    \"topic\": \"clock\",\n    \"payload\": \"1s\"\n}\nreturn message;",
         "outputs": 1,
@@ -75,27 +75,27 @@
         "y": 40,
         "wires": [
             [
-                "fa4495bc.802e8"
+                "3b08ed1d.c48502"
             ]
         ]
     },
     {
-        "id": "fa4495bc.802e8",
+        "id": "3b08ed1d.c48502",
         "type": "mqtt out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "topic": "planter_recipe",
         "qos": "2",
         "retain": "",
-        "broker": "a113a6e8.11ab8",
+        "broker": "5faf7bfe.0debb4",
         "x": 500,
         "y": 40,
         "wires": []
     },
     {
-        "id": "8aca7af2.85784",
+        "id": "5d655023.b0805",
         "type": "function",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "main recipe",
         "func": "context.recipe = context.recipe || {};\n\nswitch (msg.topic) {\n    case \"stage1Duration\":     context.recipe.stage1Duration = msg.payload; break;\n    case \"stage2Duration\":    context.recipe.stage2Duration = msg.payload; break;\n    case \"stage3Duration\":  context.recipe.stage3Duration = msg.payload; break;\n    case \"stage1Ec\": context.recipe.stage1Ec = msg.payload; break;\n    case \"stage2Ec\":  context.recipe.stage2Ec = msg.payload; break;\n    case \"stage3Ec\": context.recipe.stage3Ec = msg.payload; break;\n    case \"startDate\": context.recipe.startDate = msg.payload; break;\n    case \"autoMode\": context.recipe.autoMode = msg.payload; break;\n}\njsonObj={}\njsonObj.payload = {\n    \"topic\" : \"recipeMain\",\n    \"stage1Duration\" : context.recipe.stage1Duration,\n    \"stage2Duration\" : context.recipe.stage2Duration,\n    \"stage3Duration\" : context.recipe.stage3Duration,\n    \"stage1Ec\" : context.recipe.stage1Ec,\n    \"stage2Ec\" : context.recipe.stage2Ec,\n    \"stage3Ec\" : context.recipe.stage3Ec,\n    \"startDate\" : context.recipe.startDate,\n    \"autoMode\" : context.recipe.autoMode\n}\nreturn jsonObj;\n",
         "outputs": 1,
@@ -104,18 +104,18 @@
         "y": 420,
         "wires": [
             [
-                "4110a22d.bfbd64"
+                "ce18f5a0.667e68"
             ]
         ]
     },
     {
-        "id": "eecfe36e.7eb438",
+        "id": "b18957b0.182a08",
         "type": "ui_text_input",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "Start Date",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 1,
         "width": "4",
         "height": "1",
@@ -127,18 +127,18 @@
         "y": 320,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "873dc6f4.78acb8",
+        "id": "1e8505e5.b4635a",
         "type": "ui_switch",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "Auto",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 12,
         "width": "4",
         "height": "1",
@@ -158,18 +158,18 @@
         "y": 280,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "dff1b61e.2cd648",
+        "id": "82f67a5c.7208a8",
         "type": "ui_slider",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "Stage 1 duration",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 5,
         "width": "8",
         "height": "1",
@@ -183,18 +183,18 @@
         "y": 360,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "e17f0a05.0793",
+        "id": "fb269cce.b0343",
         "type": "ui_slider",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "Stage 2 Duration",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 7,
         "width": "8",
         "height": "1",
@@ -208,18 +208,18 @@
         "y": 440,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "ef7aeea4.a52fb",
+        "id": "97518bdd.6b51a8",
         "type": "ui_slider",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "Stage 3 Duration",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 9,
         "width": "8",
         "height": "1",
@@ -227,24 +227,24 @@
         "outs": "end",
         "topic": "stage3Duration",
         "min": 0,
-        "max": "15",
+        "max": "50",
         "step": 1,
         "x": 110,
         "y": 520,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "7deefb2a.18db9c",
+        "id": "91daeffb.c9c2f",
         "type": "ui_slider",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "stage 1 ec",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 6,
         "width": "8",
         "height": "1",
@@ -258,14 +258,14 @@
         "y": 400,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "c2f0743d.4b5de",
+        "id": "1d53b438.94532c",
         "type": "function",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "Command Parser to Output",
         "func": "var output = {payload:msg.payload};\n\nvar words = msg.payload.split(\" \");\n\nif (words[0]==\"PU1\" || words[0]==\"DR1\" || \nwords[0]==\"PU2\" || words[0]==\"DR2\" ||\nwords[0]==\"PU3\" || words[0]==\"DR3\" ||\nwords[0]==\"PU4\" || words[0]==\"DR4\") {\n    return [output,[],[]];\n}\nif (words[0]==\"LP1\" || words[0]==\"LD1\" ||\nwords[0]==\"LP2\" || words[0]==\"LD2\" ||\nwords[0]==\"LP3\" || words[0]==\"LD3\") {\n    return [[],output,[]];\n}\nif (words[0]==\"AEC\" || words[0]==\"EC\" ||\nwords[0]==\"NP\" || words[0]==\"PU\" ||\nwords[0]==\"NPA\" || words[0]==\"NPB\") {\n    return [[],[],output];\n}\n",
         "outputs": 3,
@@ -274,21 +274,21 @@
         "y": 200,
         "wires": [
             [
-                "d5cefff2.e58b48"
+                "55f4df7c.0c632"
             ],
             [
-                "b5470159.a9c34"
+                "76f3fb15.39fa74"
             ],
             [
-                "3dd22f7c.c6e2a"
+                "c96eadd5.09c19"
             ]
         ]
     },
     {
-        "id": "a82fc766.e176d8",
+        "id": "2d259544.2bebfa",
         "type": "ui_text",
-        "z": "8f21f826.8fb24",
-        "group": "7699a3e1.eb10d4",
+        "z": "46caaa5d.d13e24",
+        "group": "c65ce6fc.7abe58",
         "order": 2,
         "width": "4",
         "height": "1",
@@ -301,9 +301,9 @@
         "wires": []
     },
     {
-        "id": "83780fdb.ad4c1",
+        "id": "8f914180.3f5f3",
         "type": "function",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "days pass stage check",
         "func": "words = (msg.payload).split(\" \")\n\nif (words[0] == \"DAYS\") {\n    output = {payload : words[1]}\n    return [output,[],[]];\n}\nelse if (words[0] == \"STAGE\") {\n    output = {payload: words[1]}\n    return [[],output,[]];\n}\nelse if (words[0] == \"EC\") {\n    output = {payload:words[1]}\n    return [[],[],output]\n}\n",
         "outputs": 3,
@@ -312,19 +312,19 @@
         "y": 280,
         "wires": [
             [
-                "a82fc766.e176d8"
+                "2d259544.2bebfa"
             ],
             [
-                "21957563.b9637a"
+                "ca7fccd1.cc135"
             ],
             []
         ]
     },
     {
-        "id": "21957563.b9637a",
+        "id": "ca7fccd1.cc135",
         "type": "ui_text",
-        "z": "8f21f826.8fb24",
-        "group": "7699a3e1.eb10d4",
+        "z": "46caaa5d.d13e24",
+        "group": "c65ce6fc.7abe58",
         "order": 3,
         "width": "4",
         "height": "1",
@@ -337,13 +337,13 @@
         "wires": []
     },
     {
-        "id": "b1716b29.0a2488",
+        "id": "98d17dba.e6d42",
         "type": "ui_text_input",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "CMD Input",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 11,
         "width": "4",
         "height": "1",
@@ -355,36 +355,36 @@
         "y": 160,
         "wires": [
             [
-                "c2f0743d.4b5de"
+                "1d53b438.94532c"
             ]
         ]
     },
     {
-        "id": "3e879fec.1941a",
+        "id": "74c96a4d.5b1b34",
         "type": "mqtt in",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "topic": "planter_command",
         "qos": "2",
-        "broker": "a113a6e8.11ab8",
+        "broker": "5faf7bfe.0debb4",
         "x": 130,
         "y": 220,
         "wires": [
             [
-                "c2f0743d.4b5de",
-                "83780fdb.ad4c1",
-                "2b083e96.d05d82"
+                "1d53b438.94532c",
+                "8f914180.3f5f3",
+                "62625dee.a5b454"
             ]
         ]
     },
     {
-        "id": "e17732aa.a0105",
+        "id": "e8855c6.11dfea",
         "type": "ui_slider",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "stage 2 ec",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 8,
         "width": "8",
         "height": "1",
@@ -398,18 +398,18 @@
         "y": 480,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "1f5f7a0.4ed0b86",
+        "id": "108ae4d6.87420b",
         "type": "ui_slider",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "stage 3 ec",
         "tooltip": "",
-        "group": "7699a3e1.eb10d4",
+        "group": "c65ce6fc.7abe58",
         "order": 10,
         "width": "8",
         "height": "1",
@@ -423,14 +423,14 @@
         "y": 560,
         "wires": [
             [
-                "8aca7af2.85784"
+                "5d655023.b0805"
             ]
         ]
     },
     {
-        "id": "4110a22d.bfbd64",
+        "id": "ce18f5a0.667e68",
         "type": "json",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "property": "payload",
         "action": "",
@@ -439,28 +439,28 @@
         "y": 420,
         "wires": [
             [
-                "d9bce6ec.715508",
-                "eef552a9.4df988"
+                "8502ceb7.9c5ea",
+                "1064d2b7.ed333d"
             ]
         ]
     },
     {
-        "id": "d9bce6ec.715508",
+        "id": "8502ceb7.9c5ea",
         "type": "mqtt out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "topic": "planter_recipe",
         "qos": "2",
         "retain": "",
-        "broker": "a113a6e8.11ab8",
+        "broker": "5faf7bfe.0debb4",
         "x": 680,
         "y": 420,
         "wires": []
     },
     {
-        "id": "eef552a9.4df988",
+        "id": "1064d2b7.ed333d",
         "type": "debug",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -472,9 +472,9 @@
         "wires": []
     },
     {
-        "id": "2b083e96.d05d82",
+        "id": "62625dee.a5b454",
         "type": "debug",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -486,10 +486,10 @@
         "wires": []
     },
     {
-        "id": "46d94d17.7360bc",
+        "id": "411aaa66.f71d94",
         "type": "ui_text",
-        "z": "8f21f826.8fb24",
-        "group": "7699a3e1.eb10d4",
+        "z": "46caaa5d.d13e24",
+        "group": "c65ce6fc.7abe58",
         "order": 13,
         "width": "4",
         "height": "1",
@@ -502,53 +502,53 @@
         "wires": []
     },
     {
-        "id": "34a09cd5.13507c",
+        "id": "a95f2d14.a6373",
         "type": "serial in",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "a62176f8.8fb498",
+        "serial": "2621bf80.7ebba",
         "x": 110,
         "y": 120,
         "wires": [
             [
-                "baface86.795288"
+                "c29c18d4.f66ff8"
             ]
         ]
     },
     {
-        "id": "d5cefff2.e58b48",
+        "id": "55f4df7c.0c632",
         "type": "serial out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "5b659562.0df30c",
+        "serial": "d9d29073.85a0f",
         "x": 610,
         "y": 140,
         "wires": []
     },
     {
-        "id": "b5470159.a9c34",
+        "id": "76f3fb15.39fa74",
         "type": "serial out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "dc46d5ea.9669",
+        "serial": "3019d63f.b71efa",
         "x": 610,
         "y": 180,
         "wires": []
     },
     {
-        "id": "3dd22f7c.c6e2a",
+        "id": "c96eadd5.09c19",
         "type": "serial out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "a62176f8.8fb498",
+        "serial": "2621bf80.7ebba",
         "x": 610,
         "y": 220,
         "wires": []
     },
     {
-        "id": "9ea1f2f.feb799",
+        "id": "e413fcb7.39d71",
         "type": "function",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "Command Parser",
         "func": "var output = {payload:msg.payload};\n\nvar words = msg.payload.split(\" \");\n\nif (words[0]==\"PU1\" || words[0]==\"DR1\" || \nwords[0]==\"PU2\" || words[0]==\"DR2\" ||\nwords[0]==\"PU3\" || words[0]==\"DR3\" ||\nwords[0]==\"PU4\" || words[0]==\"DR4\") {\n    return [output,[],[]];\n}\nif (words[0]==\"LP1\" || words[0]==\"LD1\" ||\nwords[0]==\"LP2\" || words[0]==\"LD2\" ||\nwords[0]==\"LP3\" || words[0]==\"LD3\") {\n    return [[],output,[]];\n}\nif (words[0]==\"AEC\" || words[0]==\"EC\" ||\nwords[0]==\"NP\" || words[0]==\"PU\" ||\nwords[0]==\"NPA\" || words[0]==\"NPB\") {\n    return [[],[],output];\n}\n",
         "outputs": 3,
@@ -557,56 +557,56 @@
         "y": 700,
         "wires": [
             [
-                "3ef8b3fb.cf1444"
+                "4e41ecc7.2b1454"
             ],
             [
-                "9e33b2ad.e514f8"
+                "edca748f.429908"
             ],
             [
-                "5c0e8920.bafe18"
+                "b8027037.5b709"
             ]
         ]
     },
     {
-        "id": "3ef8b3fb.cf1444",
+        "id": "4e41ecc7.2b1454",
         "type": "serial out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "5b659562.0df30c",
+        "serial": "d9d29073.85a0f",
         "x": 570,
         "y": 660,
         "wires": []
     },
     {
-        "id": "9e33b2ad.e514f8",
+        "id": "edca748f.429908",
         "type": "serial out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "dc46d5ea.9669",
+        "serial": "3019d63f.b71efa",
         "x": 570,
         "y": 700,
         "wires": []
     },
     {
-        "id": "5c0e8920.bafe18",
+        "id": "b8027037.5b709",
         "type": "serial out",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "serial": "a62176f8.8fb498",
+        "serial": "2621bf80.7ebba",
         "x": 570,
         "y": 740,
         "wires": []
     },
     {
-        "id": "37c183bd.e877cc",
+        "id": "b20f4be.c6949b8",
         "type": "ui_switch",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "1 Pump",
         "tooltip": "",
-        "group": "9c3a2210.c88648",
+        "group": "2f40e90a.9781c6",
         "order": 1,
-        "width": "5",
+        "width": "4",
         "height": "1",
         "passthru": true,
         "decouple": "false",
@@ -624,26 +624,26 @@
         "y": 600,
         "wires": [
             [
-                "9ea1f2f.feb799"
+                "e413fcb7.39d71"
             ]
         ]
     },
     {
-        "id": "d0b5e199.9fd218",
+        "id": "ff57a698.eb9f58",
         "type": "ui_switch",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "1 Light",
         "tooltip": "",
-        "group": "9c3a2210.c88648",
-        "order": 2,
-        "width": "5",
+        "group": "2f40e90a.9781c6",
+        "order": 3,
+        "width": "4",
         "height": "1",
         "passthru": true,
         "decouple": "false",
         "topic": "",
         "style": "",
-        "onvalue": "LP1 1",
+        "onvalue": "LP1 50",
         "onvalueType": "str",
         "onicon": "",
         "oncolor": "",
@@ -652,21 +652,21 @@
         "officon": "",
         "offcolor": "",
         "x": 150,
-        "y": 640,
+        "y": 680,
         "wires": [
             [
-                "9ea1f2f.feb799"
+                "e413fcb7.39d71"
             ]
         ]
     },
     {
-        "id": "d1901104.16a9b8",
+        "id": "52675e3.9d950a",
         "type": "ui_button",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "group": "9c3a2210.c88648",
-        "order": 3,
-        "width": "5",
+        "group": "2f40e90a.9781c6",
+        "order": 4,
+        "width": "4",
         "height": "1",
         "passthru": false,
         "label": "1 Light Home",
@@ -677,24 +677,24 @@
         "payload": "LD1 0",
         "payloadType": "str",
         "topic": "",
-        "x": 120,
-        "y": 680,
+        "x": 130,
+        "y": 720,
         "wires": [
             [
-                "9ea1f2f.feb799"
+                "e413fcb7.39d71"
             ]
         ]
     },
     {
-        "id": "a8d58a7e.5aa348",
+        "id": "de459648.8a2a78",
         "type": "ui_switch",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "2 Pump",
         "tooltip": "",
-        "group": "9c3a2210.c88648",
+        "group": "2f40e90a.9781c6",
         "order": 5,
-        "width": "5",
+        "width": "4",
         "height": "1",
         "passthru": true,
         "decouple": "false",
@@ -709,29 +709,29 @@
         "officon": "",
         "offcolor": "",
         "x": 140,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
-                "9ea1f2f.feb799"
+                "e413fcb7.39d71"
             ]
         ]
     },
     {
-        "id": "97ce9284.62c9d",
+        "id": "de0f120a.fb293",
         "type": "ui_switch",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
         "label": "2 Light",
         "tooltip": "",
-        "group": "9c3a2210.c88648",
-        "order": 6,
-        "width": "5",
+        "group": "2f40e90a.9781c6",
+        "order": 7,
+        "width": "4",
         "height": "1",
         "passthru": true,
         "decouple": "false",
         "topic": "",
         "style": "",
-        "onvalue": "LP2 1",
+        "onvalue": "LP2 50",
         "onvalueType": "str",
         "onicon": "",
         "oncolor": "",
@@ -740,21 +740,21 @@
         "officon": "",
         "offcolor": "",
         "x": 150,
-        "y": 760,
+        "y": 840,
         "wires": [
             [
-                "9ea1f2f.feb799"
+                "e413fcb7.39d71"
             ]
         ]
     },
     {
-        "id": "b15bb646.5393e",
+        "id": "10365621.e96e8a",
         "type": "ui_button",
-        "z": "8f21f826.8fb24",
+        "z": "46caaa5d.d13e24",
         "name": "",
-        "group": "9c3a2210.c88648",
-        "order": 7,
-        "width": "5",
+        "group": "2f40e90a.9781c6",
+        "order": 8,
+        "width": "4",
         "height": "1",
         "passthru": false,
         "label": "2 Light Home",
@@ -766,15 +766,77 @@
         "payloadType": "str",
         "topic": "",
         "x": 120,
-        "y": 800,
+        "y": 880,
         "wires": [
             [
-                "9ea1f2f.feb799"
+                "e413fcb7.39d71"
             ]
         ]
     },
     {
-        "id": "a113a6e8.11ab8",
+        "id": "4e9e2c6d.6d58a4",
+        "type": "ui_switch",
+        "z": "46caaa5d.d13e24",
+        "name": "",
+        "label": "1 Drain",
+        "tooltip": "",
+        "group": "2f40e90a.9781c6",
+        "order": 2,
+        "width": "4",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "DR1 1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "DR1 0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 140,
+        "y": 640,
+        "wires": [
+            [
+                "e413fcb7.39d71"
+            ]
+        ]
+    },
+    {
+        "id": "c97dde.6bc1822",
+        "type": "ui_switch",
+        "z": "46caaa5d.d13e24",
+        "name": "",
+        "label": "2 Drain",
+        "tooltip": "",
+        "group": "2f40e90a.9781c6",
+        "order": 6,
+        "width": "4",
+        "height": "1",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "DR2 1",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "DR2 0",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 140,
+        "y": 800,
+        "wires": [
+            [
+                "e413fcb7.39d71"
+            ]
+        ]
+    },
+    {
+        "id": "5faf7bfe.0debb4",
         "type": "mqtt-broker",
         "z": "",
         "name": "localhost",
@@ -796,18 +858,18 @@
         "willPayload": ""
     },
     {
-        "id": "7699a3e1.eb10d4",
+        "id": "c65ce6fc.7abe58",
         "type": "ui_group",
         "z": "",
         "name": "Setup",
-        "tab": "cabd45ec.61c37",
+        "tab": "5382749a.63059c",
         "order": 1,
         "disp": true,
         "width": "16",
         "collapse": false
     },
     {
-        "id": "a62176f8.8fb498",
+        "id": "2621bf80.7ebba",
         "type": "serial-port",
         "z": "",
         "serialport": "/dev/ttyUSB2",
@@ -822,7 +884,7 @@
         "responsetimeout": "10000"
     },
     {
-        "id": "5b659562.0df30c",
+        "id": "d9d29073.85a0f",
         "type": "serial-port",
         "z": "",
         "serialport": "/dev/ttyUSB0",
@@ -837,7 +899,7 @@
         "responsetimeout": "10000"
     },
     {
-        "id": "dc46d5ea.9669",
+        "id": "3019d63f.b71efa",
         "type": "serial-port",
         "z": "",
         "serialport": "/dev/ttyUSB1",
@@ -852,18 +914,18 @@
         "responsetimeout": "10000"
     },
     {
-        "id": "9c3a2210.c88648",
+        "id": "2f40e90a.9781c6",
         "type": "ui_group",
         "z": "",
         "name": "Controls",
-        "tab": "cabd45ec.61c37",
+        "tab": "5382749a.63059c",
         "order": 2,
         "disp": true,
         "width": "16",
         "collapse": false
     },
     {
-        "id": "cabd45ec.61c37",
+        "id": "5382749a.63059c",
         "type": "ui_tab",
         "z": "",
         "name": "Planter-2.1 Main",
