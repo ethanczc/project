@@ -26,7 +26,7 @@ Type in the following at the bottom
 >allow-hotplug wlan0\
 >iface wlan0 inet dhcp\
 >    wpa-ssid "SSID"\
->    wpa-psk "password"\
+>    wpa-psk "password"
 
 ctrl x, save and quit
 
