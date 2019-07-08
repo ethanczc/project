@@ -18,11 +18,23 @@ or target your service application\
 `systemctl is-active "applicationName".service`\
 `systemctl status "applicationName".service`
 
+__Connect to wifi__
+
+`sudo nano /etc/network/interfaces`\
+Type in the following at the bottom
+>auto wlan0\
+>allow-hotplug wlan0\
+>iface wlan0 inet dhcp\
+>    wpa-ssid "SSID"\
+>    wpa-psk "password"\
+
+ctrl x, save and quit
+
 __Change to static ip__
 
 `ifconfig` - check the name of the ethernet port\
 `sudo nano /etc/network/interfaces`\
-Type in the following at the bottom\
+Type in the following at the bottom
 >auto "portName"\
 >iface "portName" inet static\
 >address "staticIp"\
