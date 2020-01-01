@@ -9,6 +9,41 @@ __Find packages installed by pip__
 
 `pip3 list`
 
+__Run a script using a service__
+
+create a service file in /home/pi \
+`sudo nano myscript.service`
+
+our script to be run is main.py
+
+inside the file: \
+[Unit] \
+Description=My service \
+After=network.target
+
+[Service] \
+ExecStart=/usr/bin/python3 -u main.py \
+WorkingDirectory=/home/pi \
+StandardOutput=inherit \
+StandardError=inherit \
+Restart=always \
+User=pi 
+
+[Install] \
+WantedBy=multi-user.target
+
+copy this file into \
+`sudo cp myscript.service /etc/systemd/system/myscript.service`
+
+start the service \
+`sudo systemctl start myscript.service`
+
+stop the service \
+`sudo systemctl stop myscript.service`
+
+enable the service to run upon reboot \
+`sudo systemctl enable myscript.service`
+
 __Find background running services__
 
 `service --status-all`\
