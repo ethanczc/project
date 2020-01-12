@@ -44,6 +44,14 @@ stop the service \
 enable the service to run upon reboot \
 `sudo systemctl enable myscript.service`
 
+Other notes
+* to change restart interval under [Service] \
+RestartSec=3
+
+* to update systemd after editing .service file \
+`systemctl daemon-reload`
+`systemctl restart myscript.service`
+
 __Find background running services__
 
 `service --status-all`\
