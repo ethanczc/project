@@ -44,6 +44,9 @@ stop the service \
 enable the service to run upon reboot \
 `sudo systemctl enable myscript.service`
 
+check logs \
+`journalctl -u myscript.service`
+
 Other notes
 * to change restart interval under [Service] \
 RestartSec=3
